@@ -48,6 +48,6 @@ function drawMap(mapWrapper, chartClass, colorScale, colorVar, mapTitle, width, 
 		.attr("y", 0)
 		.attr("dy", "0.35em")
 		.text(mapTitle)
-		.call(wrap, 400);
+		.call(wrap, 500);
 		
 }//drawMap
