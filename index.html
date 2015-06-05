@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+<meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Zorg - SotS</title>
+
+<head>
+
+	<!-- ADD ALL SOTS HTML FRAGMENTS CSS HERE -->
+	<link rel="stylesheet" href="css/sots_style.css">
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+	<script src="http://d3js.org/topojson.v1.min.js"></script>
+	
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+	<!-- General Scripts needed for multiple plots -->
+	<script src="js/sots_gemeentes_geo.js"></script>
+	<script src="js/sots_helperFunctions.js"></script>
+	<script src="js/sots_drawHistoLegend.js"></script>
+	<script src="js/sots_drawCallout.js"></script>
+	<script src="js/sots_bubbleLegend.js"></script>
+	<!-- Health related scripts needed for multiple plots -->
+	<script src="js/sots_gemeentes_zorg.js"></script>
+	<script src="js/sots_zorgkantoor.js"></script>
+	<script src="js/sots_zzp1_4_functions.js"></script>
+	<script src="js/sots_zzp5_10_functions.js"></script>
+	<!-- Scripts needed for the NL map and Scatterplots -->
+	<script src="js/sots_drawMap.js"></script>
+	<script src="js/sots_drawScatter.js"></script>
+	<!-- Scripts needed for the map and bars of Tilburg areas -->
+	<script src="js/sots_wijkenTilburg.js"></script>
+	<script src="js/sots_wijkenTilburg_geo.js"></script>
+	<script src="js/sots_instellingenTilburg.js"></script>
+	<script src="js/sots_drawMap_Tilburg.js"></script>
+	<script src="js/sots_barsTilburg.js"></script>
+	<!-- Scripts needed for the half circle scatter plot -->
+	<script src="js/sots_drawTilburgScatter.js"></script>
+	<!-- Scripts needed for Line bubble chart for buildings -->
+	<script src="js/sots_drawBuildingYearLine.js"></script>
+
+</head>
+
+<body>
+
+
+	<!-- SotS HTML ZZP 1 - 4 Section -->
+	<div class = "sotsVisualWrapper">
+		<div id="cont" class="container-fluid">
+			<div class="row text-center">
+				<h3 style="color: #3B3B3B;">De afname van lichte intramurale zorg</h4>
+				<div class="col-md-6 column text-center">
+					<div class="dataresource zzp1_4 map"></div>
+				</div>
+				<div class="col-md-6 column">
+					<div class="row">
+						<div class="col-md-12 column text-center"><div class="dataresource zzp1_4 chartTop"></div></div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 column text-center"><div class="dataresource zzp1_4 chartBottom"></div></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Graph separator -->
+	<hr>
+
+	<!-- SotS HTML ZZP 5 - 10 Section -->
+	<div class = "sotsVisualWrapper">
+		<div id="cont" class="container-fluid">
+			<div class="row text-center">
+				<h3 style="color: #3B3B3B; padding-bottom: 10px;">De verandering van de zware intramurale zorg in 2020</h3>
+				<div class="col-md-6 column text-center">
+					<div class="dataresource zzp5_10 map"></div>
+				</div>
+				<div class="col-md-6 column">
+					<div class="row">
+						<div class="col-md-12 column text-center"><div class="dataresource zzp5_10 chartTop"></div></div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 column text-center"><div class="dataresource zzp5_10 chartBottom"></div></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Graph separator -->
+	<hr>
+
+	<!-- SotS HTML ZZP 1 - 4 Tilburg Section -->
+	<div class = "sotsVisualWrapper">
+		<div id="cont" class="container-fluid">
+			<div class="row">
+				<div class="col-md-6 column text-center">
+					<h4 style="color: #3B3B3B; padding-bottom: 10px;">De afname van lichte intramurale zorg per wijk in Tilburg</h4>
+					<div class="dataresource zzp1_4 tilburg map"></div>
+				</div>
+				<div class="col-md-6 column text-center">
+					<h4 style="color: #3B3B3B; padding-bottom: 10px;">Verdeling van lichte en zware zorgcapaciteit per wijk in Tilburg</h4>
+					<div class="dataresource zzp1_4 tilburg bar"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Graph separator -->
+	<hr>
+
+	<!-- SotS HTML Comparing Tilburg Section -->
+	<div class = "sotsVisualWrapper">
+		<div id="cont" class="container-fluid">
+			<div class="row">
+				<div class="col-md-12 column text-center">
+					<h3 style="color: #3B3B3B; padding-bottom: 10px;">Het verschil tussen de lichte intramurale zorg die gaat verdwijnen en de groei in zware intramurale zorg tot 2020</h3>
+					<div class="dataresource tilburg scatter"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Graph separator -->
+	<hr>
+
+	<!-- SotS HTML Comparing Tilburg Section -->
+	<div class = "sotsVisualWrapper">
+		<div id="cont" class="container-fluid">
+			<div class="row">
+				<div class="col-md-12 column text-center">
+					<h4 style="color: #3B3B3B; padding-bottom: 5px;">De potentie om een zorginstelling the transformeren naar een andere functie</h4>
+					<div style="color: #6E6E6E; font-size: 14px; padding-bottom: 10px;">Voor de zorginstellingen in Tilburg</div>
+					<div class="dataresource tilburg year"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<!-- ADD ALL SOTS HTML FRAGMENTS JS HERE -->
+
+	<!-- Initiate the SVG and different g elements-->
+	<script src="js/sots_main_zzp.js"></script>
+
+</body>
+</html>
+ 
