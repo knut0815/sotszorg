@@ -230,7 +230,7 @@ function drawTilburgScatter(wrapper, width, height, margin) {
         .attr('y', 25)
 		.attr('dy', '0.75em')
 		.text("Venlo en Oss hebben een toename van het zware intramurale zorgaanbod die 170%, respectievelijk, 160% omvat van " +
-			  "de afname van het lichte intramurale zorgaanbod. ")
+			  "de afname van het lichte intramurale zorgaanbod. De locatie langs de verticale as is correct weergegeven.")
 		.call(wrap, 130);	
 	//////////////////////////////////////////////////////
 	/////////////////// Create Legend ////////////////////
