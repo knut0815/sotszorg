@@ -72,7 +72,7 @@ function drawBarsTilburg() {
 	barsTilburgRight.append("text")
 		.attr("class", "barText")
 		.attr("transform", function(d, i) { return "translate(" + (barScale(d.ZZP_totaal) + 5) + ",16)"; })
-		.style("font-size", 10)
+		.style("font-size", "10px")
 		.style("fill", "#6E6E6E")
 		.style("text-anchor", "start")
 		.text(function(d) {return Math.round(d.ZZP_totaal/10)*10;});		
@@ -110,7 +110,7 @@ function drawBarsTilburg() {
 	barsTilburgLeft.append("text")
 		.attr("class", "barText")
 		.attr("transform", function(d, i) { return "translate(" + (-barScalePerc(d.ZZP1_4_Perc) - 3) + ",16)"; })
-		.style("font-size", 10)
+		.style("font-size", "10px")
 		.style("text-anchor", "end")
 		.style("fill", "#6E6E6E")
 		.text(function(d) {return numFormatPercent(d.ZZP1_4_Perc);});
@@ -125,9 +125,10 @@ function drawBarsTilburg() {
 		.enter().append("text")
 		.attr("transform", function(d, i) { return "translate(0," + (37 + (i * barHeight)) + ")"; })
 		.attr("class", "barText")
-		.style("font-size", 12)
+		.style("font-size", "12px")
 		.style("fill", "#6E6E6E")
 		.style("text-anchor", "middle")
+		.style("pointer", "default")
 		.text(function(d) {return d.WK_NAAM;})
 		.on("mouseover", overTilburgNeighbourhood)
 		.on("mouseout", outTilburgNeighbourhood);
@@ -149,7 +150,7 @@ function drawBarsTilburg() {
 	barTilburg.append("text")
 		.attr("class", "title")
 		.attr("transform", function(d, i) { return "translate(" + -160 + "," + barOffset + ")"; })
-		.style("font-size", 12)
+		.style("font-size", "12px")
 		.style("fill", "#595959")
 		.style("text-anchor", "middle")
 		.text("% lichte intramurale zorgaanbod");		
@@ -167,7 +168,7 @@ function drawBarsTilburg() {
 	barTilburg.append("text")
 		.attr("class", "title")
 		.attr("transform", function(d, i) { return "translate(" + 105 + "," + barOffset + ")"; })
-		.style("font-size", 12)
+		.style("font-size", "12px")
 		.style("fill", "#595959")
 		.style("text-anchor", "middle")
 		.text("Verdeling van totale intramurale zorgaanbod");	

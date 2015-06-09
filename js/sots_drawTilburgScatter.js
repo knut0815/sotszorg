@@ -142,8 +142,8 @@ function drawTilburgScatter(wrapper, width, height, margin) {
 					else return "#6B6B6B"; 
 				})
 				.style("font-size", function(d) {
-					if(d.GM_NAAM === "Tilburg") return 14;
-					else return 11; 
+					if(d.GM_NAAM === "Tilburg") return "14px";
+					else return "11px"; 
 				})
 				.style("text-anchor", "middle")
 				.attr("x", function(d) { 

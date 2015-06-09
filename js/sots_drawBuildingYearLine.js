@@ -85,7 +85,7 @@ function drawBuildingYearLine(wrapper, width, height, margin) {
 		.attr("x", width/2)
 		.attr("y", -70)
 		.style("text-anchor", "middle")
-		.style("font-size", 13)
+		.style("font-size", "13px")
 		.style("fill", "#A8A8A8")
 		.text("Kans op transformeerbaarheid");
 
@@ -94,7 +94,7 @@ function drawBuildingYearLine(wrapper, width, height, margin) {
 		.attr("x", xScale(startYear20)/2 )
 		.attr("y", -40)
 		.style("text-anchor", "middle")
-		.style("font-size", 11)
+		.style("font-size", "11px")
 		.style("fill", "#4d7000")
 		.text("2%");		
 	//20% chance
@@ -102,7 +102,7 @@ function drawBuildingYearLine(wrapper, width, height, margin) {
 		.attr("x", xScale(startYear20) + (xScale(startYear50) - xScale(startYear20))/2 )
 		.attr("y", -40)
 		.style("text-anchor", "middle")
-		.style("font-size", 11)
+		.style("font-size", "11px")
 		.style("fill", "#4d7000")
 		.text("20%");
 	//50% chance
@@ -110,7 +110,7 @@ function drawBuildingYearLine(wrapper, width, height, margin) {
 		.attr("x", xScale(startYear50) + (xScale(endYear50) - xScale(startYear50))/2 )
 		.attr("y", -40)
 		.style("text-anchor", "middle")
-		.style("font-size", 11)
+		.style("font-size", "11px")
 		.style("fill", "#4d7000")
 		.text("50%");
 	//5% chance
@@ -118,7 +118,7 @@ function drawBuildingYearLine(wrapper, width, height, margin) {
 		.attr("x", xScale(endYear50) + (width - xScale(endYear50))/2 )
 		.attr("y", -40)
 		.style("text-anchor", "middle")
-		.style("font-size", 11)
+		.style("font-size", "11px")
 		.style("fill", "#4d7000")
 		.text("5%");	
 		

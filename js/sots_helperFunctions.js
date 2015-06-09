@@ -17,7 +17,12 @@ function isFunction(functionToCheck) {
 	var getType = {};
 	return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
 }
-	
+
+//Check if string cls is contained in class
+function hasClass(element, cls) {
+    return (' ' + element.attr("class") + ' ').indexOf(' ' + cls + ' ') > -1;
+}
+
 /*Taken from http://bl.ocks.org/mbostock/7555321
 //Wraps SVG text*/
 function wrap(text, width) {

@@ -184,7 +184,7 @@ function drawBottomScatter(width, height, margin) {
 function fadeIn(d) {
 	
 	//Check which chart is being hovered over
-	if (this.classList.contains("gemeente")) {
+	if (hasClass(d3.select(this), "gemeente")) {
 		var chartSVG = chartTop,
 			chosen = d,
 			cont = '.dataresource.zzp1_4.chartTop',
@@ -198,7 +198,7 @@ function fadeIn(d) {
 		clusterLegendWrapper.select(".legendRect.lightblueSquare").style("opacity", 0.4);
 		clusterLegendWrapper.select(".legendTitle.legendSub").style("opacity", 1);
 		
-	} else if (this.classList.contains("zorgkantoor")) {
+	} else if (hasClass(d3.select(this), "zorgkantoor")) {
 		var chartSVG = chartBottom,
 			chosen = d,	
 			cont = '.dataresource.zzp1_4.chartBottom',
@@ -286,7 +286,7 @@ function fadeIn(d) {
 	}//if
 	
 	//Hover over gemeente scatter
-	if (this.classList.contains("gemeente")) {
+	if (hasClass(d3.select(this), "gemeente")) {
 		//Update callout text and numbers
 		mapCallout.selectAll("#callout_title").text(chosen.GM_NAAM);
 		mapCallout.selectAll("#callout_top").text(numFormatThousands(chosen.ZZP1_4));
@@ -326,7 +326,7 @@ function fadeIn(d) {
 			});	
 				
 	//Hover over zorgkantoor scatter
-	} else if (this.classList.contains("zorgkantoor")) {
+	} else if (hasClass(d3.select(this), "zorgkantoor")) {
 		//Update callout text and numbers
 		mapCallout.selectAll("#callout_title").text(chosen.Zorgkantoor);
 		mapCallout.selectAll("#callout_top").text(numFormatThousands(Math.ceil(chosen.ZZP1_4/10)*10));
