@@ -19,7 +19,7 @@ function bubbleLegend(wrapperVar, scale, sizes, titleName) {
 		.attr("y", 0 + "px")
 		.attr("dy", "1em")
 		.text(titleName)
-		.call(wrap, 80);
+		.call(wrap, 90);
 		
 	wrapperVar.append("circle")
         .attr('r', scale(legendSize1))

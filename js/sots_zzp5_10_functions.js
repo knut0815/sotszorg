@@ -47,9 +47,9 @@ function drawTopScatter2(width, height, margin) {
 	drawScatter(data = data, wrapper = chartTop2,
 			width, height, margin, xScale, yScale, rScale, xAxis,
 			xVar = "AANT_INW_2020", yVar = "ZZP5_10_Perc_Groei", rVar = "ZZP5_10_2020", colorVar = "#00A1DE", 
-			chartTitle = "Per Gemeente", 
+			chartTitle = "Overzicht van gemeentes", 
 			xLabel = "Aantal inwoners verwacht in 2020 | [LET OP: Logarithmische schaal]", 
-			yLabelTop = "Verandering in hoge ZZP", yLabelBottom = "tot 2020");
+			yLabel = "Ontwikkeling zware intramurale zorg");
 
 	//////////////////////////////////////////////////////
 	///////////// Add line for mean value ////////////////
@@ -72,13 +72,13 @@ function drawTopScatter2(width, height, margin) {
 		.attr("transform", "translate(" + xScale(6200) + "," + yScale(0.04) + ") rotate(-90)")
 		.style("text-anchor", "start")
 		.style("font-size", 11)
-		.text("Groei in zware zorg");
+		.text("Toename");
 	chartTop2.append("text")
 		.attr("class","legendText")
 		.attr("transform", "translate(" + xScale(6200) + "," + yScale(-0.04) + ") rotate(-90)")
 		.style("text-anchor", "end")
 		.style("font-size", 11)
-		.text("Daling");
+		.text("Afname");
 	
 	//////////////////////////////////////////////////////
 	///////////////// Initialize Legend //////////////////
@@ -87,11 +87,11 @@ function drawTopScatter2(width, height, margin) {
 	var legend = chartTop2.append("g").attr("class", "legendWrapper")
 					.attr("transform", "translate(" + (scatterWidth - 10) + "," + 15 +")");
 					
-	bubbleLegend(legend, rScale, legendSizes = [5000, 1000, 100], legendName = "De totale ZIZC in 2020");				
+	bubbleLegend(legend, rScale, legendSizes = [5000, 1000, 100], legendName = "Zware intramurale zorgaanbod");				
 
 	//Create a wrapper for the circle legend				
 	var legendCircle = chartTop2.append("g").attr("class", "legendWrapper")
-					.attr("transform", "translate(" + (scatterWidth - 100) + "," + 15 +")");
+					.attr("transform", "translate(" + (scatterWidth - 110) + "," + 15 +")");
 	
 	legendCircle.append("text")
 		.attr("class","legendTitle")
@@ -142,8 +142,8 @@ function drawBottomScatter2(width, height, margin) {
 	drawScatter(data = data, wrapper = chartBottom2,
 			width, height, margin, xScale, yScale, rScale, xAxis,
 			xVar = "AANT_INW_2020", yVar = "ZZP5_10_Perc_Groei", rVar = "ZZP5_10_2020", colorVar = "#00A1DE", 
-			chartTitle = "Per Zorgkantoor Regio", xLabel = "Aantal inwoners verwacht in 2020", 
-			yLabelTop = "Verandering in hoge ZZP", yLabelBottom = "tot 2020");
+			chartTitle = "Overzicht van zorgkantoorregio's", xLabel = "Aantal inwoners verwacht in 2020", 
+			yLabel = "Ontwikkeling zware intramurale zorg");
 
 
 	//////////////////////////////////////////////////////
@@ -153,11 +153,11 @@ function drawBottomScatter2(width, height, margin) {
 	var legend = chartBottom2.append("g").attr("class", "legendWrapper")
 					.attr("transform", "translate(" + (scatterWidth - 10) + "," + 15 +")");
 					
-	bubbleLegend(legend, rScale, legendSizes = [10000, 5000, 2000], legendName = "De totale ZIZC in 2020");				
+	bubbleLegend(legend, rScale, legendSizes = [10000, 5000, 2000], legendName = "Zware intramurale zorgaanbod");				
 
 	//Create a wrapper for the circle legend				
 	var legendCircle = chartBottom2.append("g").attr("class", "legendWrapper")
-					.attr("transform", "translate(" + (scatterWidth - 100) + "," + 15 +")");
+					.attr("transform", "translate(" + (scatterWidth - 110) + "," + 15 +")");
 	
 	legendCircle.append("text")
 		.attr("class","legendTitle")

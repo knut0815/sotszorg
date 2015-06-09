@@ -50,8 +50,9 @@ function drawTopScatter(width, height, margin) {
 	drawScatter(data = data, wrapper = chartTop, 
 			width, height, margin, xScale, yScale, rScale, xAxis,
 			xVar = "AANT_INW", yVar = "ZZP1_4_Perc", rVar = "ZZP1_4", colorVar = "#00A1DE", 
-			chartTitle = "Per Gemeente", 
-			xLabel = "Aantal inwoners | [LET OP: Logarithmische schaal]", yLabelTop = "Lage ZZP %", yLabelBottom = "t.o.v. totale Zorgcapaciteit");
+			chartTitle = "Overzicht van gemeentes", 
+			xLabel = "Aantal inwoners | [LET OP: Logarithmische schaal]", 
+			yLabel = "Lichte t.o.v. totale intramurale zorg");
 	
 	//Add average of the Netherlands
 	var avgs = d3.nest() //calculate the (unweighted) average
@@ -86,11 +87,11 @@ function drawTopScatter(width, height, margin) {
 	var legend = chartTop.append("g").attr("class", "legendWrapper")
 					.attr("transform", "translate(" + (scatterWidth - 10) + "," + 15 +")");
 					
-	bubbleLegend(legend, rScale, legendSizes = [2000, 500, 50], legendName = "Het aantal LIZC dat verdwijnt");	
+	bubbleLegend(legend, rScale, legendSizes = [2000, 500, 50], legendName = "Lichte intramurale zorg die verdwijnt");	
 
 	//Create a wrapper for the circle legend				
 	var legendCircle = chartTop.append("g").attr("class", "legendWrapper")
-					.attr("transform", "translate(" + (scatterWidth - 100) + "," + 15 +")");
+					.attr("transform", "translate(" + (scatterWidth - 110) + "," + 15 +")");
 	
 	legendCircle.append("text")
 		.attr("class","legendTitle")
@@ -142,8 +143,8 @@ function drawBottomScatter(width, height, margin) {
 	drawScatter(data = data, wrapper = chartBottom,
 			width, height, margin, xScale, yScale, rScale, xAxis,
 			xVar = "AANT_INW", yVar = "ZZP1_4_Perc", rVar = "ZZP1_4", colorVar = "#00A1DE", 
-			chartTitle = "Per Zorgkantoor Regio", 
-			xLabel = "Aantal inwoners", yLabelTop = "Lage ZZP %", yLabelBottom = "t.o.v. totale Zorgcapaciteit");
+			chartTitle = "Overzicht van zorgkantoorregio's", 
+			xLabel = "Aantal inwoners", yLabel = "Lichte t.o.v. totale intramurale zorg");
 
 
 	//////////////////////////////////////////////////////
@@ -153,11 +154,11 @@ function drawBottomScatter(width, height, margin) {
 	var legend = chartBottom.append("g").attr("class", "legendWrapper")
 					.attr("transform", "translate(" + (scatterWidth - 10) + "," + 15 +")");
 					
-	bubbleLegend(legend, rScale, legendSizes = [3000, 1000, 200], legendName = "Het aantal LIZC dat verdwijnt");				
+	bubbleLegend(legend, rScale, legendSizes = [3000, 1000, 200], legendName = "Lichte intramurale zorg die verdwijnt");				
 
 	//Create a wrapper for the circle legend				
 	var legendCircle = chartBottom.append("g").attr("class", "legendWrapper")
-					.attr("transform", "translate(" + (scatterWidth - 100) + "," + 15 +")");
+					.attr("transform", "translate(" + (scatterWidth - 110) + "," + 15 +")");
 	
 	legendCircle.append("text")
 		.attr("class","legendTitle")

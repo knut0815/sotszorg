@@ -100,7 +100,7 @@ function drawHistoLegend(data, width, height, margin, colorScale, xVar, wrapper,
 		.style("text-anchor", "middle")
 		.style("font-size", "10px")
 		.text(title)
-		//.call(wrap, legendWidth)
+		.call(wrap, legendWidth*1.2)
 		;
 	
 	//Append unknown section

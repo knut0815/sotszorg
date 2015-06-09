@@ -86,7 +86,7 @@ function drawMapTilburg(mapWrapper, colorVar, mapTitle, width, height) {
 		.attr("x", 0 + "px")
 		.attr("y", 0 + "px")
 		.attr("dy", "1em")
-		.text("Elke cirkel is een zorginstelling")
+		.text("Elke cirkel is een zorglocatie")
 		.call(wrap, 80);
 	legendCircle.append("circle")
         .attr('r', rScale(300))
@@ -98,7 +98,7 @@ function drawMapTilburg(mapWrapper, colorVar, mapTitle, width, height) {
 	var legendBubble = mapWrapper.append("g").attr("class", "legendWrapper")
 					.attr("transform", "translate(" + 20 + "," + (height/2 + 100) +")");
 	//Initiate and draw the bubble size legend				
-	bubbleLegend(legendBubble, rScale, legendSizes = [300, 150, 50], legendName = "Diameter: # zorgplekken per instelling");				
+	bubbleLegend(legendBubble, rScale, legendSizes = [300, 150, 50], legendName = "Aantal plaatsen per locatie");				
 	
 }//drawMapTilburg
 
@@ -151,7 +151,7 @@ function createMapTilburgLegend(legendWrapper) {
 		  .attr("dy", "0.35em")
 		  .attr("class", "legendTitle")
 		  .style("text-anchor", "middle")		  
-		  .text("Lage ZZP % t.o.v. de totale zorgcapaciteit")
+		  .text("Lichte intramurale zorg die verdwijnt")
 		  .call(wrap, 100); 
 			  
 	//Create container per rect/text pair  

@@ -163,7 +163,7 @@ function drawBuildingYearLine(wrapper, width, height, margin) {
 	var legend = wrapper.append("g").attr("class", "legendWrapper")
 					.attr("transform", "translate(" + (width + 150) + "," + -30 +")");
 					
-	bubbleLegend(legend, rScale, legendSizes = [300, 150, 50], legendName = "Aantal zorgplekken");				
+	bubbleLegend(legend, rScale, legendSizes = [300, 150, 50], legendName = "Aantal plaatsen per locatie");				
 
 	//Create a wrapper for the circle legend				
 	var legendCircle = wrapper.append("g").attr("class", "legendWrapper")
@@ -175,7 +175,7 @@ function drawBuildingYearLine(wrapper, width, height, margin) {
 		.attr("x", 0 + "px")
 		.attr("y", 0 + "px")
 		.attr("dy", "1em")
-		.text("Elke cirkel is een zorginstelling")
+		.text("Elke cirkel is een zorglocatie")
 		.call(wrap, 90);
 	legendCircle.append("circle")
         .attr('r', rScale(300))

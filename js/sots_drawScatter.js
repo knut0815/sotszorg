@@ -5,7 +5,7 @@
 function drawScatter(data, wrapper, width, height, margin,
 					xScale, yScale, rScale, xAxis,
 					xVar, yVar, rVar, colorVar, chartTitle, 
-					xLabel, yLabelTop, yLabelBottom) {
+					xLabel, yLabel) {
 							 
 	//////////////////////////////////////////////////////
 	/////////////////// Initialize Axes //////////////////
@@ -115,19 +115,15 @@ function drawScatter(data, wrapper, width, height, margin,
 	//Set up y axis label
 	wrapper.append("g")
 		.append("text")
+		.attr("x", 0)
+		.attr("y", 0)
+		.attr("dy", "0.35em")
 		.attr("class", "y axis label")
 		.attr("text-anchor", "middle")
-		.attr("transform", "translate(" + 0 + "," + -25 + ")")
+		.attr("transform", "translate(" + 0 + "," + -30 + ")")
 		.style("font-size", "10px")
-		.text(yLabelTop);
-
-	wrapper.append("g")
-		.append("text")
-		.attr("class", "y axis label")
-		.attr("text-anchor", "middle")
-		.attr("transform", "translate(" + 0 + "," + -12 + ")")
-		.style("font-size", "8px")
-		.text(yLabelBottom);
+		.text(yLabel)
+		.call(wrap, 100);
 
 	//Set up chart title
 	wrapper.append("g")

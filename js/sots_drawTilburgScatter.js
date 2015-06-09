@@ -20,9 +20,9 @@ function drawTilburgScatter(wrapper, width, height, margin) {
 	//Set the new x axis range - Already done in parent function
 	//Set the new x axis range
 	var xScale = d3.scale.linear()
-		.range([0, width])
+		.range([0, width - 1/6*width])
 		//.domain(d3.extent(data, function(d) {return d.GroeiZwaar_VerdwijningLicht;}))
-		.domain([0,1.2])
+		.domain([0,1])
 		.nice();
 		
 	//Set new x-axis	
@@ -86,7 +86,7 @@ function drawTilburgScatter(wrapper, width, height, margin) {
 				else return 0.6; })
 				.attr("fill", "url(#gradientZZP1_4)")
 				.attr("cx", function(d) { 
-					if(d.GM_NAAM === "Oss" | d.GM_NAAM === "Venlo") return xScale(1.1);
+					if(d.GM_NAAM === "Oss" | d.GM_NAAM === "Venlo") return xScale(1.05);
 					else return xScale(d.GroeiZwaar_VerdwijningLicht);			
 				})
 				.attr("cy", function(d) {return yScale(d.Perc_Groei_80plus);})
@@ -118,7 +118,7 @@ function drawTilburgScatter(wrapper, width, height, margin) {
 			//.style("stroke-width", 1)
 			//.style("stroke-dasharray", ("3, 3"))
 			.attr("cx", function(d) { 
-					if(d.GM_NAAM === "Oss" | d.GM_NAAM === "Venlo") return xScale(1.1);
+					if(d.GM_NAAM === "Oss" | d.GM_NAAM === "Venlo") return xScale(1.05);
 					else return xScale(d.GroeiZwaar_VerdwijningLicht);			
 			})
 			.attr("cy", function(d) {return yScale(d.Perc_Groei_80plus);})
@@ -147,7 +147,7 @@ function drawTilburgScatter(wrapper, width, height, margin) {
 				})
 				.style("text-anchor", "middle")
 				.attr("x", function(d) { 
-					if(d.GM_NAAM === "Oss" | d.GM_NAAM === "Venlo") return xScale(1.1);
+					if(d.GM_NAAM === "Oss" | d.GM_NAAM === "Venlo") return xScale(1.05);
 					else return xScale(d.GroeiZwaar_VerdwijningLicht);			
 				})
 				.attr("y", function(d) { 
@@ -169,24 +169,21 @@ function drawTilburgScatter(wrapper, width, height, margin) {
 		.attr("text-anchor", "middle")
 		.attr("transform", "translate(" + (width/2) + "," + (height + 40) + ")")
 		.style("font-size", "10px")
-		.text("Groei aan zware zorg / Verdwijnen van lichte zorg (Hoe groot is de donkerblauwe bol t.o.v. de lichtblauwe bol)");
+		.text("Verhouding van de toename van het zware versus de afname van het " + 
+			  "lichte intramurale zorgaanbod (donkerblauwe versus lichtblauwe halve cirkel)");
 
 	//Set up y axis label
 	wrapper.append("g")
 		.append("text")
+		.attr("x", 0)
+		.attr("y", 0)
+		.attr("dy", "0.35em")
 		.attr("class", "y axis label")
 		.attr("text-anchor", "middle")
-		.attr("transform", "translate(" + 0 + "," + (-margin.top*1/3 - 2) + ")")
+		.attr("transform", "translate(" + 0 + "," + (-margin.top*1/3 - 6) + ")")
 		.style("font-size", "10px")
-		.text("Groei aan populatie 80+");
-
-	wrapper.append("g")
-		.append("text")
-		.attr("class", "y axis label")
-		.attr("text-anchor", "middle")
-		.attr("transform", "translate(" + 0 + "," + (-margin.top*1/3 + 10) + ")")
-		.style("font-size", "8px")
-		.text("tot 2020");
+		.text("Ontwikkeling van populatie 80+")
+		.call(wrap, 100);
 
 	//Set up chart title
 	//wrapper.append("g")
@@ -218,7 +215,7 @@ function drawTilburgScatter(wrapper, width, height, margin) {
 	//////////////////////////////////////////////////////
 	
 	var annotation = wrapper.append("g").attr("class", "annotationWrapper")
-					.attr("transform", "translate(" + xScale(1.1) + "," + yScale(0.215) +")");				
+					.attr("transform", "translate(" + xScale(1.05) + "," + yScale(0.215) +")");				
 	
 	//The line and text explaining the > 100% cities
 	annotation.append("line")
@@ -232,9 +229,8 @@ function drawTilburgScatter(wrapper, width, height, margin) {
         .attr('x', 8)
         .attr('y', 25)
 		.attr('dy', '0.75em')
-		.text("Venlo en Oss hebben een groei aan zware zorg die 170% en 160% in gaat nemen ten opzichte van " +
-			  "de lichte intramurale zorg die zal verdwijnen, respectievelijk. " +
-			  "Om de leesbaarheid van de grafiek onder de 100% te vergroten zijn ze beide op 110% gezet")
+		.text("Venlo en Oss hebben een toename van het zware intramurale zorgaanbod die 170%, respectievelijk, 160% omvat van " +
+			  "de afname van het lichte intramurale zorgaanbod. ")
 		.call(wrap, 130);	
 	//////////////////////////////////////////////////////
 	/////////////////// Create Legend ////////////////////
@@ -273,7 +269,7 @@ function drawTilburgScatter(wrapper, width, height, margin) {
         .attr('x', -11)
         .attr('y', -80)
 		.attr('dy', '0.75em')
-		.text("De lichte intramurale zorg die zal verdwijnen")
+		.text("De afname van het lichte intramurale zorgaanbod")
 		.call(wrap, 100);
 
 	//The line and text explaining the right ZZP 5 - 10 half
@@ -288,7 +284,7 @@ function drawTilburgScatter(wrapper, width, height, margin) {
         .attr('x', 9)
         .attr('y', -50)
 		.attr('dy', '0.75em')
-		.text("De extra verwachte behoefte aan zware intramurale zorg in 2020")
+		.text("De toename van het zware intramurale zorgaanbod")
 		.call(wrap, 100);
 		
 	//Lines explaining the differences between the two halves
@@ -335,11 +331,10 @@ function showTilburgScatterTooltip (d) {
 	trigger: 'manual',
 	html : true,
 	content: function() { 
-	  return "<span style='font-size: 11px;'>Er zullen <span style='color: #00A1DE; font-weight: bold;'>" + d.ZZP1_4 + "</span>" + 
-	  " lichte intramurale zorgplekken verdwijnen in <span style='color: #00A1DE; font-weight: bold;'>" + d.GM_NAAM + 
-	  "</span> en een verwachte behoefte zijn aan een " + (d.ZZP5_10_Groei >= 0 ? "stijging" : "daling") + 
-	  " van <span style='color: #00A1DE; font-weight: bold;'>" + Math.abs(d.ZZP5_10_Groei) + 
-	  "</span> zware intramurale zorgplekken in 2020.</span>"; }
+	  return "<span style='font-size: 11px;'>In <span style='color: #00A1DE; font-weight: bold;'>" + d.GM_NAAM + 
+	  "</span> neemt het lichte intramurale zorgaanbod af met <span style='color: #00A1DE; font-weight: bold;'>" + d.ZZP1_4 + "</span>" + 
+	  " plaatsen. Het aanbod zware intramurale zorg neemt toe met <span style='color: #00A1DE; font-weight: bold;'>" + d.ZZP5_10_Groei + 
+	  "</span> plaatsen, uitgaand van ongewijzigd beleid.</span>"; }
   });
   $(this).popover('show')
 }

@@ -148,11 +148,11 @@ function drawBarsTilburg() {
 	//Title & Line of left bars
 	barTilburg.append("text")
 		.attr("class", "title")
-		.attr("transform", function(d, i) { return "translate(" + -165 + "," + barOffset + ")"; })
+		.attr("transform", function(d, i) { return "translate(" + -160 + "," + barOffset + ")"; })
 		.style("font-size", 12)
 		.style("fill", "#595959")
 		.style("text-anchor", "middle")
-		.text("Lage ZZP % (van totale capaciteit)");		
+		.text("% lichte intramurale zorgaanbod");		
 	barTilburg.append("line")
 		.attr("class", "line")
 		.attr("transform", function(d, i) { return "translate(" + -165 + "," + barOffset + ")"; })
@@ -170,7 +170,7 @@ function drawBarsTilburg() {
 		.style("font-size", 12)
 		.style("fill", "#595959")
 		.style("text-anchor", "middle")
-		.text("Verdeling van Zorgcapaciteit");	
+		.text("Verdeling van totale intramurale zorgaanbod");	
 	barTilburg.append("line")
 		.attr("class", "line")
 		.attr("transform", function(d, i) { return "translate(" + 105 + "," + barOffset + ")"; })
@@ -186,11 +186,11 @@ function drawBarsTilburg() {
 	
 	//Create a wrapper for the bars to the right
 	var legendBars = barTilburg.append("g").attr("class", "legendWrapper")
-					.attr("transform", "translate(" + (barTilburgWidth/2 - 150) + "," + (barHeight*9.5) +")");
+					.attr("transform", "translate(" + (barTilburgWidth/2 - 150) + "," + (barHeight*9) +")");
 					
 	var legendRectSize = 10,
 		legendRectHeight = 15,
-		legendText = ["Lichte intramurale zorgcapaciteit", "Zware intramurale zorgcapaciteit"];
+		legendText = ["Lichte intramurale zorgaanbod", "Zware intramurale zorgaanbod"];
 			  
 	//Create container per rect/text pair  
 	var legend = legendBars.selectAll('.scatterLegendSquare')  	

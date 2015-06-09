@@ -210,22 +210,24 @@ drawBottomScatter(scatterWidth, scatterHeight, scatterMargin);
 				
 //Draw the NL map
 drawMap(mapWrapper = map, chartClass = "chartZZP1_4", colorScale = color, colorVar = "ZZP1_4_Perc", 
-		mapTitle = "Percentage van lichte intramurale zorg (lage ZZP) t.o.v. totale intramurale zorg per gemeente", width = mapWidth, height = mapHeight);
+		mapTitle = "De afname van de lichte t.o.v. de totale intramurale zorg per gemeente", width = mapWidth, height = mapHeight);
 //Draw the legend below the map
 drawHistoLegend(data = gemeentes, width = mapWidth, height = mapHeight, margin = scatterMargin,
-				colorScale = color, xVar = "ZZP1_4_Perc", wrapper = mapLegendWrapper, title = "% lage ZZP t.o.v. totale intramurale zorg", yoff = 50);
+				colorScale = color, xVar = "ZZP1_4_Perc", wrapper = mapLegendWrapper, 
+				title = "% lichte t.o.v. totale intramurale zorgaanbod", yoff = 50);
 //Draw the legend visible on hover over
 drawClusterLegend(wrapper = clusterLegendWrapper, width = mapWidth, height = mapHeight, margin = scatterMargin)
 //Create data note
 svgMap.append("text")
-	.attr("transform", "translate(" + scatterMargin.left + "," + (scatterMargin.top + mapHeight + scatterMargin.bottom/2) + ")")
+	.attr("transform", "translate(" + scatterMargin.left + "," + (scatterMargin.top + mapHeight + scatterMargin.bottom*3/4) + ")")
 	.attr("class", "legendTitle")
 	.style("font-size", "8px")
 	.style("text-anchor", "start")
 	.text("Bron: CBS & Zorg op de Kaart (2014)");
 
 //Initiate the call out
-drawCallout(calloutWrapper = mapCallout, topText = "Aantal lage ZZP dat zal verdwijnen", bottomText = "% lage ZZP t.o.v. totale intramurale zorg");
+drawCallout(calloutWrapper = mapCallout, topText = "Lichte zorgaanbod dat zal verdwijnen", 
+			bottomText = "% lichte t.o.v. totale intramurale zorg");
 
 /////////////////////////// ZZP 5 - 10 ///////////////////////////////
 
@@ -236,23 +238,24 @@ drawBottomScatter2(scatterWidth, scatterHeight, scatterMargin);
 				
 //Draw the NL map
 drawMap(mapWrapper = map2, chartClass = "chartZZP5_10", colorScale = color2, colorVar = "ZZP5_10_Perc_Groei", 
-		mapTitle = "De percentuele verandering van de benodigde zorgvraag van zware intramurale zorg (hoge ZZP) per gemeente in 2020", width = mapWidth, height = mapHeight);
+		mapTitle = "De ontwikkeling van de zware intramurale zorg per gemeente", width = mapWidth, height = mapHeight);
 //Draw the legend below the map
 drawHistoLegend(data = gemeentes, width = mapWidth, height = mapHeight, margin = scatterMargin,
 				colorScale = color2, xVar = "ZZP5_10_Perc_Groei", wrapper = mapLegendWrapper2, 
-				title = "Verandering in hoge ZZP tot 2020", yoff = 50);
+				title = "Af- of toename van het zware intramurale zorgaanbod tot 2020", yoff = 50);
 //Draw the legend visible on hover over
 drawClusterLegend(wrapper = clusterLegendWrapper2, width = mapWidth, height = mapHeight, margin = scatterMargin)
 //Create data note
 svgMap2.append("text")
-	.attr("transform", "translate(" + scatterMargin.left + "," + (scatterMargin.top + mapHeight + scatterMargin.bottom/2) + ")")
+	.attr("transform", "translate(" + scatterMargin.left + "," + (scatterMargin.top + mapHeight + scatterMargin.bottom*3/4) + ")")
 	.attr("class", "legendTitle")
 	.style("font-size", "8px")
 	.style("text-anchor", "start")
 	.text("Bron: Zorg op de Kaart (2014), verwachte populatie groei en bij gelijke samenstelling van gemeentes (CBS, 2011)");
 
 //Initiate the call out
-drawCallout(calloutWrapper = mapCallout2, topText = "Totaal verwachte hoge ZZP in 2020", bottomText = "Verandering in hoge ZZP tot 2020");
+drawCallout(calloutWrapper = mapCallout2, topText = "Aanbod zware intramurale zorg in 2020", 
+			bottomText = "Ontwikkeling tot 2020");
 
 /////////////////////////// Tilburg - ZZP 1 - 4 ///////////////////////////////
 //Draw the Tilburg map
@@ -278,7 +281,7 @@ svgScatterTilburg.append("text")
 	.attr("class", "legendTitle")
 	.style("text-anchor", "start")
 	.style("font-size", "8px")
-	.text("Bron: CBS & Zorg op de Kaart (2014)");
+	.text("Bron: CBS & Zorg op de Kaart (2014) | De G32 steden uit de provincies Gelderland, Noord-Brabant & Limburg");
 
 	
 ////////////////// Tilburg - Building year line chart /////////////////////
@@ -288,7 +291,7 @@ drawBuildingYearLine(lineTilburg, lineTilburgWidth, lineTilburgHeight, lineTilbu
 	
 //Create data note
 svgLineTilburg.append("text")
-	.attr("transform", "translate(" + lineTilburgMargin.left + "," + (lineTilburgMargin.top + lineTilburgHeight + lineTilburgMargin.bottom/2) + ")")
+	.attr("transform", "translate(" + lineTilburgMargin.left + "," + (lineTilburgMargin.top + lineTilburgHeight + lineTilburgMargin.bottom*3/4) + ")")
 	.attr("class", "legendTitle")
 	.style("font-size", "8px")
 	.style("text-anchor", "start")
