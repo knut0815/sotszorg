@@ -71,13 +71,13 @@ function drawTopScatter2(width, height, margin) {
 		.attr("class","legendText")
 		.attr("transform", "translate(" + xScale(6200) + "," + yScale(0.04) + ") rotate(-90)")
 		.style("text-anchor", "start")
-		.style("font-size", 11)
+		.style("font-size", "11px")
 		.text("Toename");
 	chartTop2.append("text")
 		.attr("class","legendText")
 		.attr("transform", "translate(" + xScale(6200) + "," + yScale(-0.04) + ") rotate(-90)")
 		.style("text-anchor", "end")
-		.style("font-size", 11)
+		.style("font-size", "11px")
 		.text("Afname");
 	
 	//////////////////////////////////////////////////////
