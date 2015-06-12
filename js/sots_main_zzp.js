@@ -217,13 +217,6 @@ drawHistoLegend(data = gemeentes, width = mapWidth, height = mapHeight, margin =
 				title = "% lichte t.o.v. totale intramurale zorgaanbod", yoff = 50);
 //Draw the legend visible on hover over
 drawClusterLegend(wrapper = clusterLegendWrapper, width = mapWidth, height = mapHeight, margin = scatterMargin)
-//Create data note
-svgMap.append("text")
-	.attr("transform", "translate(" + scatterMargin.left + "," + (scatterMargin.top + mapHeight + scatterMargin.bottom*3/4) + ")")
-	.attr("class", "legendTitle")
-	.style("font-size", "8px")
-	.style("text-anchor", "start")
-	.text("Bron: CBS & Zorg op de Kaart (2014)");
 
 //Initiate the call out
 drawCallout(calloutWrapper = mapCallout, topText = "Lichte zorgaanbod dat zal verdwijnen", 
@@ -245,13 +238,6 @@ drawHistoLegend(data = gemeentes, width = mapWidth, height = mapHeight, margin =
 				title = "Af- of toename van het zware intramurale zorgaanbod tot 2020", yoff = 50);
 //Draw the legend visible on hover over
 drawClusterLegend(wrapper = clusterLegendWrapper2, width = mapWidth, height = mapHeight, margin = scatterMargin)
-//Create data note
-svgMap2.append("text")
-	.attr("transform", "translate(" + scatterMargin.left + "," + (scatterMargin.top + mapHeight + scatterMargin.bottom*3/4) + ")")
-	.attr("class", "legendTitle")
-	.style("font-size", "8px")
-	.style("text-anchor", "start")
-	.text("Bron: Zorg op de Kaart (2014), verwachte populatie groei en bij gelijke samenstelling van gemeentes (CBS, 2011)");
 
 //Initiate the call out
 drawCallout(calloutWrapper = mapCallout2, topText = "Aanbod zware intramurale zorg in 2020", 
@@ -260,13 +246,6 @@ drawCallout(calloutWrapper = mapCallout2, topText = "Aanbod zware intramurale zo
 /////////////////////////// Tilburg - ZZP 1 - 4 ///////////////////////////////
 //Draw the Tilburg map
 drawMapTilburg(mapWrapper = mapTilburg, colorVar = "ZZP1_4_Perc", mapTitle = "", width = mapTilburgWidth, height = mapTilburgHeight);
-//Create data note
-svgMapTilburg.append("text")
-	.attr("transform", "translate(" + mapTilburgMargin.left + "," + (mapTilburgMargin.top + mapTilburgHeight + mapTilburgMargin.bottom*0.75) + ")")
-	.attr("class", "legendTitle")
-	.style("text-anchor", "start")
-	.style("font-size", "8px")
-	.text("Bron: CBS & Zorg op de Kaart (2014)");
 
 //Draw the Tilburg bar charts
 drawBarsTilburg();
@@ -275,27 +254,12 @@ drawBarsTilburg();
 
 //Draw Tilburg comparison scatter
 drawTilburgScatter(scatterTilburg, scatterTilburgWidth, scatterTilburgHeight, scatterTilburgMargin);
-//Create data note
-svgScatterTilburg.append("text")
-	.attr("transform", "translate(" + scatterTilburgMargin.left + "," + (scatterTilburgMargin.top + scatterTilburgHeight + scatterTilburgMargin.bottom*0.75) + ")")
-	.attr("class", "legendTitle")
-	.style("text-anchor", "start")
-	.style("font-size", "8px")
-	.text("Bron: CBS & Zorg op de Kaart (2014) | De G32 steden uit de provincies Gelderland, Noord-Brabant & Limburg");
-
 	
 ////////////////// Tilburg - Building year line chart /////////////////////
 	
 //Draw Tilburg health care centers building year chart
 drawBuildingYearLine(lineTilburg, lineTilburgWidth, lineTilburgHeight, lineTilburgMargin);	
-	
-//Create data note
-svgLineTilburg.append("text")
-	.attr("transform", "translate(" + lineTilburgMargin.left + "," + (lineTilburgMargin.top + lineTilburgHeight + lineTilburgMargin.bottom*3/4) + ")")
-	.attr("class", "legendTitle")
-	.style("font-size", "8px")
-	.style("text-anchor", "start")
-	.text("Note: Het K.B.O. Kapucijnenklooster uit 1882 is buiten de grafiek gelaten | Bron: Kadaster, Transformeerbaarheidskans door TNO");
+
 ///////////////////////////////////////////////////////////////////////////
 /////////////////////////// Other functions ///////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
