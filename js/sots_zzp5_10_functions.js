@@ -287,7 +287,7 @@ function fadeIn2(d) {
 		//Update callout text and numbers
 		mapCallout2.selectAll("#callout_title").text(chosen.GM_NAAM);
 		mapCallout2.selectAll("#callout_top").text(numFormatThousands(chosen.ZZP5_10_2020));
-		mapCallout2.selectAll("#callout_bottom").text(numFormatPercentDec(chosen.ZZP5_10_Perc_Groei));
+		mapCallout2.selectAll("#callout_bottom").text(chosen.ZZP5_10_Perc_Groei > 0 ? ("+" + numFormatPercentDec(chosen.ZZP5_10_Perc_Groei)) : numFormatPercentDec(chosen.ZZP5_10_Perc_Groei));
 
 		//Include clusterin in amp
 		map2.selectAll("path")
@@ -327,7 +327,7 @@ function fadeIn2(d) {
 		//Update callout text and numbers
 		mapCallout2.selectAll("#callout_title").text(chosen.Zorgkantoor);
 		mapCallout2.selectAll("#callout_top").text(numFormatThousands(Math.ceil(chosen.ZZP5_10_2020/10)*10));
-		mapCallout2.selectAll("#callout_bottom").text(numFormatPercentDec(chosen.ZZP5_10_Perc_Groei));
+		mapCallout2.selectAll("#callout_bottom").text(chosen.ZZP5_10_Perc_Groei > 0 ? ("+" + numFormatPercentDec(chosen.ZZP5_10_Perc_Groei)) : numFormatPercentDec(chosen.ZZP5_10_Perc_Groei));
 
 		//Fade all gemeentes except for the chosen one
 		map2.selectAll("path")
@@ -363,7 +363,7 @@ function fadeIn2(d) {
 			mapCallout2.selectAll("#callout_bottom").text("-");
 		} else {
 			mapCallout2.selectAll("#callout_top").text(numFormatThousands(gemeentes[GM_CODES[chosen.GM_CODE]].ZZP5_10_2020));
-			mapCallout2.selectAll("#callout_bottom").text(numFormatPercentDec(gemeentes[GM_CODES[chosen.GM_CODE]].ZZP5_10_Perc_Groei));
+			mapCallout2.selectAll("#callout_bottom").text(gemeentes[GM_CODES[chosen.GM_CODE]].ZZP5_10_Perc_Groei > 0 ? ("+" + numFormatPercentDec(gemeentes[GM_CODES[chosen.GM_CODE]].ZZP5_10_Perc_Groei)) : numFormatPercentDec(gemeentes[GM_CODES[chosen.GM_CODE]].ZZP5_10_Perc_Groei));	
 		}//else
 
 		//Include clustering in amp
