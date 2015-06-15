@@ -26,7 +26,7 @@ function drawTopScatter(width, height, margin) {
 		.orient("bottom")
 		.scale(xScale)
 		.ticks(6)
-		.tickFormat(d3.format("s"))
+		//.tickFormat(d3.format("s"))
 		.tickFormat(function (d) {
 				return xScale.tickFormat(8,function(d) { 
 					var prefix = d3.formatPrefix(d); 

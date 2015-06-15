@@ -567,7 +567,7 @@ drawMap(mapWrapper = map2, chartClass = "chartZZP5_10", colorScale = color2, col
 /*Draw the legend below the map*/
 drawHistoLegend(data = gemeentes, width = mapWidth, height = mapHeight, margin = scatterMargin,
 				colorScale = color2, xVar = "ZZP5_10_Perc_Groei", wrapper = mapLegendWrapper2, 
-				title = "Af- of toename van het zware intramurale zorgaanbod tot 2020", yoff = 50);
+				title = "Af- of toename van het zware intramurale zorgaanbod tot 2020", yoff = 30);
 /*Draw the legend visible on hover over*/
 drawClusterLegend(wrapper = clusterLegendWrapper2, width = mapWidth, height = mapHeight, margin = scatterMargin)
 

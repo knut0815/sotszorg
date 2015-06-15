@@ -2,6 +2,50 @@
 ///////// State of the State - Health - 2 Maps & Scatterplots /////////////
 ///////////////////////////////////////////////////////////////////////////
 
+///////////////////////////////////////////////////////////////////////////
+////////////////// Initiate Scatter plots ZZP 1 - 4 ///////////////////////
+///////////////////////////////////////////////////////////////////////////
+//General widths and heights
+var scatterMargin = {left: 60, top: 60, right: 40, bottom: 50},
+	scatterWidth = Math.min($(".dataresource.zzp1_4.chartTop").width(),500) - scatterMargin.left - scatterMargin.right,
+	scatterHeight = scatterWidth*3/5;
+
+//Create SVG inside the div		
+var svgChartTop = d3.select(".dataresource.zzp1_4.chartTop").append("svg")
+		.attr("width", (scatterWidth + scatterMargin.left + scatterMargin.right))
+		.attr("height", (scatterHeight + scatterMargin.top + scatterMargin.bottom));
+
+var svgChartBottom = d3.select(".dataresource.zzp1_4.chartBottom").append("svg")
+		.attr("width", (scatterWidth + scatterMargin.left + scatterMargin.right))
+		.attr("height", (scatterHeight + scatterMargin.top + scatterMargin.bottom));
+
+//Create g elements for each group of chart elements		
+var chartTop = svgChartTop.append("g").attr("class", "chartZZP1_4")
+		.attr("transform", "translate(" + scatterMargin.left + "," + scatterMargin.top + ")");
+var chartBottom = svgChartBottom.append("g").attr("class", "chartZZP1_4")
+		.attr("transform", "translate(" + scatterMargin.left + "," + scatterMargin.top + ")");
+
+///////////////////////////////////////////////////////////////////////////
+/////////////////////// Initiate Map NL ZZP 1 - 4 /////////////////////////
+///////////////////////////////////////////////////////////////////////////
+//General widths and heights	
+var mapWidth = scatterWidth,
+	mapHeight = Math.max(670, 2*($(".dataresource.zzp1_4.chartTop").height())) - scatterMargin.top - scatterMargin.bottom - 50;
+
+//Create SVG inside the div	
+var svgMap = d3.select(".dataresource.zzp1_4.map").append("svg")
+		.attr("width", (mapWidth + scatterMargin.left + scatterMargin.right))
+		.attr("height", (mapHeight + scatterMargin.top + scatterMargin.bottom));
+		
+//Create g elements for each group of chart elements	
+var map = svgMap.append("g").attr("class", "map")
+		.attr("transform", "translate(" + scatterMargin.left + "," + scatterMargin.top + ")");
+var mapCallout = svgMap.append("g").attr("class", "mapCallout")
+		.attr("transform", "translate(" + (scatterMargin.left) + "," + (scatterMargin.top * 7/4) + ")")
+		.style("visibility", "hidden");
+var mapLegendWrapper = svgMap.append("g").attr("class", "legend");
+var clusterLegendWrapper = svgMap.append("g").attr("class", "legend");
+
 //////////////////////////////////////////////////////
 /////////////////// Draw the Map /////////////////////
 //////////////////////////////////////////////////////
@@ -16,7 +60,7 @@ function drawMap(mapWrapper, chartClass, colorScale, colorVar, mapTitle, width, 
 	var projection = d3.geo.mercator()
 						.center(d3.geo.centroid(gemeentesGeo))
 						.scale(5500)
-						.translate([(width/2 + 50), (height/2)]);
+						.translate([(width/2 + 50), (height/2+10)]);
 	var path = d3.geo.path().projection(projection);
 
 	//Is the map being made for the ZZP 1 - 4 or ZZP 5 - 10 version
@@ -55,6 +99,250 @@ function drawMap(mapWrapper, chartClass, colorScale, colorVar, mapTitle, width, 
 		.call(wrap, width*0.8);
 		
 }/*drawMap*/
+
+////////////////////////////////////////////////////////////	
+///////////////// Initiate Map Legend //////////////////////
+////////////////////////////////////////////////////////////
+	
+function drawHistoLegend(data, width, height, margin, colorScale, xVar, wrapper, title, yoff) {
+
+	/* The simple gradient bar indicates the colors, and the bar chart displayed above it shows the distribution over those colors.
+	The code is taken from the excellent visualization of http://www.speechlike.org/2012/12/mapping-language-diversity/ 
+	with adjustments to make it more to my own wishes*/
+		
+	//Set several variables for the Legend
+	var legendWidth = 160,	//Width of the total Legend
+		legendHeight = 40,	//Height of the Legend
+		steps = 30,			//Number of steps/bars
+		xoff = 12,    		// x offset
+		xstep = legendWidth / steps,
+		Min = d3.min(data, function(d) {return eval("d." + xVar);}),
+		Max = d3.max(data, function(d) {return eval("d." + xVar);});
+		
+	wrapper.attr("transform", "translate(" + margin.left + "," + (margin.top + height - legendHeight - yoff) + ")");
+			
+	//Take the value from the countries array and sort ascending
+	legendArray = data.map(function (d) {return eval("d." + xVar);})
+				      .sort(function(a,b){return a-b});
+
+	//x axis scale
+	var xLegend = d3.scale.linear()
+				.domain([Min, Max])
+				.range([0,(steps*xstep)])
+				.nice();
+	//Make sure the increment follows the x-axis and not the min/max of the data		
+	var increment = (xLegend.domain()[1]-xLegend.domain()[0]) / steps;
+	
+	//There are as many bins as there are "steps" in the bar graph function.
+	var bin = d3.scale.quantize()
+				.domain(xLegend.domain())
+				.range(d3.range(0,steps));
+
+	//The frequency count for each of the bins.
+	var binfreq = {};
+	//Set default to zero and add one to the correct bin and go down all values
+	d3.range(0,steps).forEach(function (d) { binfreq[d] = 0; });
+	legendArray.forEach(function (d) { binfreq[bin(d)] += 1; });
+	
+	//Scale of the bars
+	yLegend = d3.scale.linear()
+		.range([legendHeight, 0])
+		.domain([0, d3.max(d3.range(0,steps), function (d) {return binfreq[d];})]);
+				
+	//Set new x-axis	
+	var legendAxis = d3.svg.axis()
+		.orient("bottom")
+		.ticks(6)
+		.tickFormat(numFormatPercent)
+		.scale(xLegend);	
+	//Append the x-axis
+	wrapper.append("g")
+		.attr("class", "x axis small")
+		.attr("transform", "translate(" + 0 + "," + (legendHeight + 15) + ")")
+		.call(legendAxis);
+	
+	//Not sure why this has to be done in this manner, but it works	
+	eval("var colorDomain = [" + colorScale.domain() + "];");
+	var colorStart = colorDomain
+	colorStart.unshift(xLegend.domain()[0]);
+	eval("var colorDomain = [" + colorScale.domain() + "];");
+	var colorWidth = colorDomain;
+	colorWidth.push(xLegend.domain()[1]);
+	
+	//There are two components here: the bar graph and the scale below.
+	//Line below
+	wrapper.append("g").selectAll(".colorkey")
+		.data(colorDomain)
+		.enter().append("rect")
+			.attr("class", "colorkey")
+			.attr("x", function (d,i) {return xLegend(colorStart[i]);})
+			.attr("y", legendHeight + 3)
+			.attr("width", function(d,i) {return xLegend(colorWidth[i]) - xLegend(colorStart[i]);})
+			.attr("height", 9)
+			.attr("fill", function (d) {return colorScale(d-0.0001);});
+		
+	//Bars above
+	wrapper.append("g").selectAll(".colorbars")
+		.data(d3.range(0,steps))
+		.enter().append("rect")
+			.attr("class", "colorbars")
+			.attr("x", function (d) {return d * xstep;})
+			.attr("y", function (d) {return yLegend(binfreq[d]);})
+			.attr("width", xstep-1)
+			.attr("height", function (d) {return legendHeight - yLegend(binfreq[d]);})
+			.attr("fill", function (d) {return colorScale(increment * d + xLegend.domain()[0]);});
+
+	//Add a title below the color scale
+	wrapper.append("text")
+		.attr("class", "legendTitle")
+		.attr("transform", "translate(" + (legendWidth/2) + "," + (legendHeight + 15 + 35) + ")")
+		.attr("x", 0)
+		.attr("y", 0)
+		.attr("dy", "0em")
+		.style("text-anchor", "middle")
+		.style("font-size", "10px")
+		.text(title)
+		.call(wrap, legendWidth*1.2)
+		;
+	
+	//Append unknown section
+	wrapper.append("rect")
+		.attr("x", (legendWidth * 1.1))
+		.attr("y", legendHeight + 3)
+		.attr("width", 18)
+		.attr("height", 9)
+		.style("fill", "#DCDCDC");
+	wrapper.append("text")
+		.attr("class", "legendTitle")
+		.attr("x", (legendWidth * 1.1 + 23))
+		.attr("y", legendHeight + 3)
+		.attr("dy", "0.75em")
+		.style("text-anchor", "start")
+		.style("font-size", "9px")
+		.text("onbekend")
+		;
+		
+}//Legend
+
+///////////////////////////////////////////////////////////////////////////
+//////////////////////////// Dynamic Legend ///////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+
+function drawClusterLegend(wrapper, width, height, margin) {
+	wrapper.attr("transform", "translate(" + margin.left + "," + (margin.top + height - 50) + ")")
+		   .style("visibility", "hidden");
+	
+	//Append rectangle for chosen area (green)
+	wrapper.append("rect")
+		.attr("class", "legendRect greenSquare")
+		.attr("x", 0)
+		.attr("y", 0)
+		.attr("width", 15)
+		.attr("height", 15)
+		.style("fill", "#81BC00");
+	wrapper.append("text")
+		.attr("class", "legendTitle greenSquare")
+		.attr("x", 23)
+		.attr("y", 0)
+		.attr("dy", "1.25em")
+		.style("text-anchor", "start")
+		.style("font-size", "9px")
+		.text("");
+
+	//Append rectangle for (dark blue)
+	wrapper.append("rect")
+		.attr("class", "legendRect darkblueSquare")
+		.attr("x", 0)
+		.attr("y", 20)
+		.attr("width", 15)
+		.attr("height", 15)
+		.style("fill", "#00A1DE");
+	wrapper.append("text")
+		.attr("class", "legendTitle darkblueSquare")
+		.attr("x", 23)
+		.attr("y", 20)
+		.attr("dy", "1.25em")
+		.style("text-anchor", "start")
+		.style("font-size", "9px")
+		.text("");
+		
+	//Append rectangle for similar gemeentes (light blue)
+	wrapper.append("rect")
+		.attr("class", "legendRect lightblueSquare")
+		.attr("x", 0)
+		.attr("y", 40)
+		.attr("width", 15)
+		.attr("height", 15)
+		.style("fill", "#00A1DE");
+	wrapper.append("text")
+		.attr("class", "legendTitle lightblueSquare")
+		.attr("x", 23)
+		.attr("y", 40)
+		.attr("dy", "1.25em")
+		.style("text-anchor", "start")
+		.style("font-size", "9px")
+		.text("");
+	wrapper.append("text")
+		.attr("class", "legendTitle legendSub")
+		.attr("x", 30)
+		.attr("y", 55)
+		.attr("dy", "1.25em")
+		.style("text-anchor", "start")
+		.style("font-size", "9px")
+		.text("aantal inwoners, inkomen, leeftijdsverdeling en % huurwoningen");
+	
+}//drawClusterLegend
+
+//////////////////////////////////////////////////////
+/////////////// Create Map callout ///////////////////
+//////////////////////////////////////////////////////
+
+function drawCallout(calloutWrapper, topText, bottomText) {
+	var calloutMarginLeft = 0,
+		callOutNumbers = calloutMarginLeft + 190;
+		
+	calloutWrapper.append("text")
+		.attr("class", "callout")
+		.attr("id", "callout_title")
+		.attr("transform", "translate(" + (calloutMarginLeft) + "," + (10) + ")")
+		.style("font-size", "12px")
+		.style("fill", "#0D0D0D")
+		.text("Groningen");
+
+	calloutWrapper.append("text")
+		.attr("class", "callout")
+		.style("fill", "#6E6E6E")
+		.attr("transform", "translate(" + (calloutMarginLeft) + "," + (35) + ")")
+		.text(topText);
+		
+	calloutWrapper.append("text")
+		.attr("class", "callout")
+		.style("fill", "#6E6E6E")
+		.attr("transform", "translate(" + (calloutMarginLeft) + "," + (50) + ")")
+		.text(bottomText);
+
+	calloutWrapper.append("text")
+		.attr("class", "callout")
+		.attr("id", "callout_top")
+		.attr("transform", "translate(" + (callOutNumbers) + "," + (35) + ")")
+		.text("346");
+		
+	calloutWrapper.append("text")
+		.attr("class", "callout")
+		.attr("id", "callout_bottom")
+		.attr("transform", "translate(" + (callOutNumbers) + "," + (50) + ")")
+		.text("3467");
+		
+	calloutWrapper.append("line")
+		.attr("class", "callout line")
+		.style("stroke-width",  1)
+		.style("stroke", "#D1D1D1")
+		.style("shape-rendering", "crispEdges")
+		.attr("x1", 0)
+		.attr("x2", callOutNumbers*1.1)
+		.attr("y1", 17)
+		.attr("y2", 17);	
+}//function drawCallout
 
 /*////////////////////////////////////////////////////
 /////////////// Draw the Scatter plot ////////////////
@@ -177,119 +465,6 @@ function drawScatter(data, wrapper, width, height, margin,
 }/*function drawScatter*/
 
 ///////////////////////////////////////////////////////////////////////////
-//////////////////////////// Dynamic Legend ///////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-
-function drawClusterLegend(wrapper, width, height, margin) {
-	wrapper.attr("transform", "translate(" + margin.left + "," + (margin.top + height - 90) + ")")
-		   .style("visibility", "hidden");
-	
-	//Append rectangle for chosen area (green)
-	wrapper.append("rect")
-		.attr("class", "legendRect greenSquare")
-		.attr("x", 0)
-		.attr("y", 0)
-		.attr("width", 15)
-		.attr("height", 15)
-		.style("fill", "#81BC00");
-	wrapper.append("text")
-		.attr("class", "legendTitle greenSquare")
-		.attr("x", 23)
-		.attr("y", 0)
-		.attr("dy", "1.25em")
-		.style("text-anchor", "start")
-		.style("font-size", "9px")
-		.text("");
-
-	//Append rectangle for (dark blue)
-	wrapper.append("rect")
-		.attr("class", "legendRect darkblueSquare")
-		.attr("x", 0)
-		.attr("y", 20)
-		.attr("width", 15)
-		.attr("height", 15)
-		.style("fill", "#00A1DE");
-	wrapper.append("text")
-		.attr("class", "legendTitle darkblueSquare")
-		.attr("x", 23)
-		.attr("y", 20)
-		.attr("dy", "1.25em")
-		.style("text-anchor", "start")
-		.style("font-size", "9px")
-		.text("");
-		
-	//Append rectangle for similar gemeentes (light blue)
-	wrapper.append("rect")
-		.attr("class", "legendRect lightblueSquare")
-		.attr("x", 0)
-		.attr("y", 40)
-		.attr("width", 15)
-		.attr("height", 15)
-		.style("fill", "#00A1DE");
-	wrapper.append("text")
-		.attr("class", "legendTitle lightblueSquare")
-		.attr("x", 23)
-		.attr("y", 40)
-		.attr("dy", "1.25em")
-		.style("text-anchor", "start")
-		.style("font-size", "9px")
-		.text("");
-	wrapper.append("text")
-		.attr("class", "legendTitle legendSub")
-		.attr("x", 30)
-		.attr("y", 55)
-		.attr("dy", "1.25em")
-		.style("text-anchor", "start")
-		.style("font-size", "9px")
-		.text("aantal inwoners, inkomen, leeftijdsverdeling en % huurwoningen");
-	
-}//drawClusterLegend
-
-///////////////////////////////////////////////////////////////////////////
-////////////////// Initiate Scatter plots ZZP 1 - 4 ///////////////////////
-///////////////////////////////////////////////////////////////////////////
-//General widths and heights
-var scatterMargin = {left: 60, top: 60, right: 40, bottom: 50},
-	scatterWidth = Math.min($(".dataresource.zzp1_4.chartTop").width(),500) - scatterMargin.left - scatterMargin.right,
-	scatterHeight = scatterWidth*3/5;
-
-//Create SVG inside the div		
-var svgChartTop = d3.select(".dataresource.zzp1_4.chartTop").append("svg")
-		.attr("width", (scatterWidth + scatterMargin.left + scatterMargin.right))
-		.attr("height", (scatterHeight + scatterMargin.top + scatterMargin.bottom));
-
-var svgChartBottom = d3.select(".dataresource.zzp1_4.chartBottom").append("svg")
-		.attr("width", (scatterWidth + scatterMargin.left + scatterMargin.right))
-		.attr("height", (scatterHeight + scatterMargin.top + scatterMargin.bottom));
-
-//Create g elements for each group of chart elements		
-var chartTop = svgChartTop.append("g").attr("class", "chartZZP1_4")
-		.attr("transform", "translate(" + scatterMargin.left + "," + scatterMargin.top + ")");
-var chartBottom = svgChartBottom.append("g").attr("class", "chartZZP1_4")
-		.attr("transform", "translate(" + scatterMargin.left + "," + scatterMargin.top + ")");
-
-///////////////////////////////////////////////////////////////////////////
-/////////////////////// Initiate Map NL ZZP 1 - 4 /////////////////////////
-///////////////////////////////////////////////////////////////////////////
-//General widths and heights	
-var mapWidth = scatterWidth,
-	mapHeight = 2*($(".dataresource.zzp1_4.chartTop").height()) - scatterMargin.top - scatterMargin.bottom - 50;
-
-//Create SVG inside the div	
-var svgMap = d3.select(".dataresource.zzp1_4.map").append("svg")
-		.attr("width", (mapWidth + scatterMargin.left + scatterMargin.right))
-		.attr("height", (mapHeight + scatterMargin.top + scatterMargin.bottom));
-		
-//Create g elements for each group of chart elements	
-var map = svgMap.append("g").attr("class", "map")
-		.attr("transform", "translate(" + scatterMargin.left + "," + scatterMargin.top + ")");
-var mapCallout = svgMap.append("g").attr("class", "mapCallout")
-		.attr("transform", "translate(" + (scatterMargin.left) + "," + (scatterMargin.top * 7/4) + ")")
-		.style("visibility", "hidden");
-var mapLegendWrapper = svgMap.append("g").attr("class", "legend");
-var clusterLegendWrapper = svgMap.append("g").attr("class", "legend");
-
-///////////////////////////////////////////////////////////////////////////
 /////////////////////// ZZP 1 - 4 Functions ///////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
 
@@ -363,6 +538,7 @@ function drawTopScatter(width, height, margin) {
 		.attr("y2", 0)
 		.style("stroke", "#B5B5B5")
 		.style("shape-rendering", "crispEdges")
+		.style("stroke-dasharray", "2 2")
 		.style("pointer-events", "none");	
 	//The word above the line
 	medianLine.append("text")
@@ -852,7 +1028,7 @@ drawMap(mapWrapper = map, chartClass = "chartZZP1_4", colorScale = color, colorV
 /*Draw the legend below the map*/
 drawHistoLegend(data = gemeentes, width = mapWidth, height = mapHeight, margin = scatterMargin,
 				colorScale = color, xVar = "ZZP1_4_Perc", wrapper = mapLegendWrapper, 
-				title = "% lichte t.o.v. totale intramurale zorgaanbod", yoff = 50);
+				title = "% lichte t.o.v. totale intramurale zorgaanbod", yoff = 30);
 /*Draw the legend visible on hover over*/
 drawClusterLegend(wrapper = clusterLegendWrapper, width = mapWidth, height = mapHeight, margin = scatterMargin)
 

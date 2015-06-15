@@ -15,10 +15,7 @@ function drawScatter(data, wrapper, width, height, margin,
 	//var xScale = d3.scale.log()
 	//	.range([0, width])
 	//	.domain(d3.extent(data, function(d) {return eval("d." + xVar);}))
-	//	.nice();
-
-	
-		
+	//	.nice();	
 
 	//Append the x-axis
 	wrapper.append("g")
