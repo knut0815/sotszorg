@@ -54,7 +54,7 @@ function drawBuildingYearLine(wrapper, width, height, margin) {
 		.call(xAxis);
 	
 	var rScale = d3.scale.sqrt()
-		.range([0, 20])
+		.range([0, (mobileScreen ? 10 : 20)])
 		.domain([0, d3.max(data, function(d) {return d.ZZP_totaal;})]);
 
 	//////////////////////////////////////////////////////

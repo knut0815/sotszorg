@@ -1041,7 +1041,7 @@ drawClusterLegend(wrapper = clusterLegendWrapper, width = mapWidth, height = map
 /*Initiate the call out*/
 drawCallout(calloutWrapper = mapCallout, topText = "Lichte zorgaanbod dat zal verdwijnen", 
 			bottomText = "% lichte t.o.v. totale intramurale zorg");
-			
+	
 ////////////////////////// Create the search box ///////////////////////////////
 
 //Create new options
