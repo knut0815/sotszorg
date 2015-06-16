@@ -20,9 +20,9 @@ var mapTilburg = svgMapTilburg.append("g").attr("class", "map")
 ///////////////////////////////////////////////////////////////////////////
 
 //General widths and heights	
-var barTilburgMargin = {left: 30, top: 20, right: 30, bottom: 60},
+var barTilburgMargin = {left: 20, top: 20, right: 20, bottom: (mobileScreen ? 30 : 60)},
 	barTilburgWidth = Math.min($(".dataresource.zzp1_4.tilburg.bar").width(),500) - barTilburgMargin.left - barTilburgMargin.right,
-	barTilburgHeight = barTilburgWidth*3/4;
+	barTilburgHeight = Math.max(barTilburgWidth*3/4, 350) ;
 
 //Create SVG inside the div	
 var svgbarTilburg = d3.select(".dataresource.zzp1_4.tilburg.bar").append("svg")
@@ -43,12 +43,15 @@ function drawMapTilburg(mapWrapper, colorVar, mapTitle, width, height) {
 	///////////////////// Initiate Map /////////////////////////
 	////////////////////////////////////////////////////////////
 	
+	var mapScale = (!mobileScreen ? 90000 : 50000);
+	var mapMove = (!mobileScreen ? 90 : 70);
+	
 	// new projection
 	var projection = d3.geo.mercator()
 						//.center(d3.geo.centroid(wijkenTilburgGeo))
 						.center([5.088772,51.569372])
-						.scale(90000)
-						.translate([(width/2 + 90), (height/2 + 30)]);
+						.scale(mapScale)
+						.translate([(width/2 + mapMove), (height/2 + 30)]);
 	var path = d3.geo.path().projection(projection);
 
 	mapWrapper.selectAll("path")
@@ -84,7 +87,7 @@ function drawMapTilburg(mapWrapper, colorVar, mapTitle, width, height) {
 	
 	//Scale for the zorginstellingen circles on the Tilburg map
 	var rScale = d3.scale.linear()
-		.range([0,15])
+		.range([0,(mobileScreen ? 8 : 15)])
 		.domain([0, d3.max(zorginstellingenTilburg, function(d) {return d.ZZP_totaal;})]);
 	//Create and plot the zorginstellingen on the tilburg map
 	var instellingen = mapWrapper.selectAll(".instellingen")
@@ -107,7 +110,7 @@ function drawMapTilburg(mapWrapper, colorVar, mapTitle, width, height) {
 
 	//Create a wrapper for the color legend
 	var legendcolor = mapWrapper.append("g").attr("class", "legendWrapper")
-					.attr("transform", "translate(" + 20 + "," + (height/2 - 130) +")");
+					.attr("transform", "translate(" + 20 + "," + (height/2 - (mobileScreen ? 100 : 130)) +")");
 					
 	createMapTilburgLegend(legendcolor);
 					
@@ -131,7 +134,7 @@ function drawMapTilburg(mapWrapper, colorVar, mapTitle, width, height) {
 		
 	//Create wrapper for the bubble size legend
 	var legendBubble = mapWrapper.append("g").attr("class", "legendWrapper")
-					.attr("transform", "translate(" + 20 + "," + (height/2 + 100) +")");
+					.attr("transform", "translate(" + 20 + "," + (height/2 + (mobileScreen ? 50 : 100)) +")");
 	//Initiate and draw the bubble size legend				
 	bubbleLegend(legendBubble, rScale, legendSizes = [300, 150, 50], legendName = "Aantal plaatsen per locatie");				
 	
@@ -221,14 +224,14 @@ function createMapTilburgLegend(legendWrapper) {
 ///////////////////////// Tilburg bar charts //////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-function drawBarsTilburg() {
+function drawBarsTilburg(data, width, height, margin) {
 
 	///////////////////////////////////////////////////////////////////////////
 	///////////////////////// Initiate variables //////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
 
 	//General variables
-	var barHeight = 35,
+	var barHeight = Math.round(height/data.length * 0.85),
 		barOffset = 0;
 	
 	//////////////////////////////// Wrappers ////////////////////////////////////
@@ -238,24 +241,24 @@ function drawBarsTilburg() {
 			.attr("transform", "translate(" + 0 + "," + barOffset + ")");		
 	//Wrapper for the right pointing bars
 	var barTilburgRightWrapper = barTilburg.append("g").attr("class", "barTilburgRight")
-			.attr("transform", "translate(" + -10 + "," + barOffset + ")");
+			.attr("transform", "translate(" + 50 + "," + barOffset + ")");
 	//Wrapper for the text per neighbourhood in between the bars
 	var barTilburgTextWrapper = barTilburg.append("g").attr("class", "barTilburgText")
-			.attr("transform", "translate(" + -60 + "," + barOffset + ")");
+			.attr("transform", "translate(" + 0 + "," + barOffset + ")");
 	//Wrapper for the left pointing percentage bars
 	var barTilburgLeftWrapper = barTilburg.append("g").attr("class", "barTilburgLeft")
-			.attr("transform", "translate(" + -110 + "," + barOffset + ")");
+			.attr("transform", "translate(" + -50 + "," + barOffset + ")");
 	
 	/////////////////////////////////// Scales ////////////////////////////////////
 	
 	//Scale for the right pointing absolute number bars
 	var barScale = d3.scale.linear()
-			.range([0, barTilburgWidth/2])
-			.domain([0,d3.max(wijkenTilburg, function(d) {return d.ZZP_totaal;})]);
+			.range([0, width/2-60])
+			.domain([0,d3.max(data, function(d) {return d.ZZP_totaal;})]);
 	//Scale for the left pointing absolute percentage bars		
 	var barScalePerc = d3.scale.linear()
-			.range([0, barTilburgWidth/4])
-			.domain([0,d3.max(wijkenTilburg, function(d) {return d.ZZP1_4_Perc;})]);
+			.range([0, width/2-60])
+			.domain([0,d3.max(data, function(d) {return d.ZZP1_4_Perc;})]);
 
 	///////////////////////////////////////////////////////////////////////////
 	/////////////////////// Create the bar charts /////////////////////////////
@@ -263,11 +266,11 @@ function drawBarsTilburg() {
 
 	//Create background rectangle to improve hover
 	var barsTilburgBackground = barTilburgWrapper.selectAll("rect")
-		.data(wijkenTilburg)
+		.data(data)
 		.enter().append("rect")
-		.attr("transform", function(d, i) { return "translate(" + (-barTilburgWidth/2) + "," + (20 + (i * barHeight)) + ")"; })
+		.attr("transform", function(d, i) { return "translate(" + (-width/2) + "," + (i * barHeight - barHeight/2) + ")"; })
 		.attr("class", "background")
-		.attr("width", barTilburgWidth)
+		.attr("width", width)
 		.attr("height", barHeight)
 		.style("fill", "white")
 		.on("mouseover", overTilburgNeighbourhood)
@@ -275,9 +278,9 @@ function drawBarsTilburg() {
 		
 	//Right pointing bar g wrappers		
 	var barsTilburgRight = barTilburgRightWrapper.selectAll("g")
-		.data(wijkenTilburg)
+		.data(data)
 		.enter().append("g")
-		.attr("transform", function(d, i) { return "translate(0," + (20 + (i * barHeight)) + ")"; })
+		.attr("transform", function(d, i) { return "translate(0," + (i * barHeight - barHeight/2) + ")"; })
 		.attr("class", "barRight")
 		.on("mouseover", overTilburgNeighbourhood)
 		.on("mouseout", outTilburgNeighbourhood);
@@ -312,9 +315,9 @@ function drawBarsTilburg() {
 		
 	//Left pointing ZZP 1-4 percentage wrapper
 	var barsTilburgLeft = barTilburgLeftWrapper.selectAll("g")
-		.data(wijkenTilburg)
+		.data(data)
 		.enter().append("g")
-		.attr("transform", function(d, i) { return "translate(0," + (20 + (i * barHeight)) + ")"; })
+		.attr("transform", function(d, i) { return "translate(0," + (i * barHeight - barHeight/2) + ")"; })
 		.attr("class", "barLeft")
 		.on("mouseover", overTilburgNeighbourhood)
 		.on("mouseout", outTilburgNeighbourhood);
@@ -340,9 +343,10 @@ function drawBarsTilburg() {
 	
 	//The neighbourhood names in between the two bars
 	var barsTilburgText = barTilburgTextWrapper.selectAll("text")
-		.data(wijkenTilburg)
+		.data(data)
 		.enter().append("text")
-		.attr("transform", function(d, i) { return "translate(0," + (37 + (i * barHeight)) + ")"; })
+		.attr("transform", function(d, i) { return "translate(0," + (i * barHeight) + ")"; })
+		.attr("dy", "-0.1em")
 		.attr("class", "barText")
 		.style("font-size", "12px")
 		.style("fill", "#6E6E6E")
@@ -351,62 +355,54 @@ function drawBarsTilburg() {
 		.text(function(d) {return d.WK_NAAM;})
 		.on("mouseover", overTilburgNeighbourhood)
 		.on("mouseout", outTilburgNeighbourhood);
-
-	//Title
-	/*barTilburg.append("text")
-		.attr("class", "title")
-		.attr("transform", function(d, i) { return "translate(" + -60 + "," + -30 + ")"; })
-		.style("font-size", 18)
-		.style("fill", "#2B2B2B")
-		.style("text-anchor", "middle")
-		.attr("x", 0)
-		.attr("y", 0)
-		.attr("dy", "0.35em")
-		.text("Lichte en Zware ZorgCapaciteit verdeling per wijk in Tilburg")
-		.call(wrap, 350);*/	
 		
 	//Title & Line of left bars
 	barTilburg.append("text")
 		.attr("class", "title")
-		.attr("transform", function(d, i) { return "translate(" + -160 + "," + barOffset + ")"; })
 		.style("font-size", "12px")
 		.style("fill", "#595959")
 		.style("text-anchor", "middle")
-		.text("% lichte intramurale zorgaanbod");		
+		.text("% lichte intramurale zorgaanbod")
+		.attr("x", -width/4)
+		.attr("y", (data.length * barHeight + 5))
+		.attr("dy", "0em")
+		.call(wrap, (width-20)/2);			
 	barTilburg.append("line")
 		.attr("class", "line")
-		.attr("transform", function(d, i) { return "translate(" + -165 + "," + barOffset + ")"; })
-		.attr("x1", -70)
-		.attr("y1", 5)
-		.attr("x2", 70)
-		.attr("y2", 5)
+		.attr("x1", -(width/2*0.9))
+		.attr("y1", ((data.length-1) * barHeight + barHeight/2))
+		.attr("x2", -10)
+		.attr("y2", ((data.length-1) * barHeight + barHeight/2))
 		.style("stroke", "#DCDCDC")
-		.style("shape-rendering", "crispEdges");	
+		.style("shape-rendering", "crispEdges");
 		
 	//Title of right bars
 	barTilburg.append("text")
 		.attr("class", "title")
-		.attr("transform", function(d, i) { return "translate(" + 105 + "," + barOffset + ")"; })
 		.style("font-size", "12px")
 		.style("fill", "#595959")
 		.style("text-anchor", "middle")
-		.text("Verdeling van totale intramurale zorgaanbod");	
+		.text("Verdeling van totale intramurale zorgaanbod")
+		.attr("x", width/4)
+		.attr("y", (data.length * barHeight + 5))
+		.attr("dy", "0em")
+		.call(wrap, (width-20)/2);	
 	barTilburg.append("line")
 		.attr("class", "line")
-		.attr("transform", function(d, i) { return "translate(" + 105 + "," + barOffset + ")"; })
-		.attr("x1", -(barTilburgWidth/4))
-		.attr("y1", 5)
-		.attr("x2", (barTilburgWidth/4))
-		.attr("y2", 5)
+		.attr("x1", (width/2*0.9))
+		.attr("y1", ((data.length-1) * barHeight + barHeight/2))
+		.attr("x2", 10)
+		.attr("y2", ((data.length-1) * barHeight + barHeight/2))
 		.style("stroke", "#DCDCDC")
-		.style("shape-rendering", "crispEdges");			
+		.style("shape-rendering", "crispEdges");
+			
 	///////////////////////////////////////////////////////////////////////////
 	////////////////////////////////// Legend /////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////	
 	
 	//Create a wrapper for the bars to the right
 	var legendBars = barTilburg.append("g").attr("class", "legendWrapper")
-					.attr("transform", "translate(" + (barTilburgWidth/2 - 150) + "," + (barHeight*9) +")");
+					.attr("transform", "translate(" + (mobileScreen ? 10 : 50) + "," + (barHeight*data.length+5) +")");
 					
 	var legendRectSize = 10,
 		legendRectHeight = 15,
@@ -858,6 +854,6 @@ var colorTilburgNames = ["20% - 30%","30% - 35%","35% - 40%"];
 drawMapTilburg(mapWrapper = mapTilburg, colorVar = "ZZP1_4_Perc", mapTitle = "", width = mapTilburgWidth, height = mapTilburgHeight);
 
 //Draw the Tilburg bar charts
-drawBarsTilburg();
+drawBarsTilburg(data = wijkenTilburg, width = barTilburgWidth, height = barTilburgHeight, margin = barTilburgMargin);
 
 

@@ -31,7 +31,7 @@ var svgMap2 = d3.select(".dataresource.zzp5_10.map").append("svg")
 var map2 = svgMap2.append("g").attr("class", "map")
 		.attr("transform", "translate(" + scatterMargin.left + "," + scatterMargin.top + ")");
 var mapCallout2 = svgMap2.append("g").attr("class", "mapCallout")
-		.attr("transform", "translate(" + (scatterMargin.left) + "," + (scatterMargin.top * 7/4) + ")")
+		.attr("transform", "translate(" + (scatterMargin.left) + "," + (scatterMargin.top * 5/4) + ")")
 		.style("visibility", "hidden");
 var mapLegendWrapper2 = svgMap2.append("g").attr("class", "legend");
 var clusterLegendWrapper2 = svgMap2.append("g").attr("class", "legend");
@@ -63,7 +63,7 @@ function drawTopScatter2(width, height, margin) {
 		.orient("bottom")
 		.scale(xScale)
 		.tickFormat(function (d) {
-				return xScale.tickFormat(8,function(d) { 
+				return xScale.tickFormat((mobileScreen ? 3 : 8),function(d) { 
 					var prefix = d3.formatPrefix(d); 
 					return prefix.scale(d) + prefix.symbol;
 				})(d);
@@ -78,7 +78,7 @@ function drawTopScatter2(width, height, margin) {
 	
 	//Set the scale for the bubble sizes
 	var rScale = d3.scale.sqrt()
-		.range([0, 20])
+		.range([0, (mobileScreen ? 10 : 20)])
 		.domain([0, d3.max(data, function(d) {return d.ZZP5_10_2020;})]);
 		
 	// Create gemeente scatter plot
@@ -105,45 +105,48 @@ function drawTopScatter2(width, height, margin) {
 		.style("pointer-events", "none");	
 
 	//Add Text along y-axis to explain
-	chartTop2.append("text")
-		.attr("class","legendText")
-		.attr("transform", "translate(" + xScale(6200) + "," + yScale(0.04) + ") rotate(-90)")
-		.style("text-anchor", "start")
-		.style("font-size", "11px")
-		.text("Toename");
-	chartTop2.append("text")
-		.attr("class","legendText")
-		.attr("transform", "translate(" + xScale(6200) + "," + yScale(-0.04) + ") rotate(-90)")
-		.style("text-anchor", "end")
-		.style("font-size", "11px")
-		.text("Afname");
-	
+	if (!mobileScreen) {
+		chartTop2.append("text")
+			.attr("class","legendText")
+			.attr("transform", "translate(" + 15 + "," + yScale(0.04) + ") rotate(-90)")
+			.style("text-anchor", "start")
+			.style("font-size", "11px")
+			.text("Toename");
+		chartTop2.append("text")
+			.attr("class","legendText")
+			.attr("transform", "translate(" + 15 + "," + yScale(-0.04) + ") rotate(-90)")
+			.style("text-anchor", "end")
+			.style("font-size", "11px")
+			.text("Afname");
+	}//if
 	//////////////////////////////////////////////////////
 	///////////////// Initialize Legend //////////////////
 	//////////////////////////////////////////////////////
 
 	var legend = chartTop2.append("g").attr("class", "legendWrapper")
-					.attr("transform", "translate(" + (scatterWidth - 10) + "," + 15 +")");
+					.attr("transform", "translate(" + (scatterWidth - 10) + "," + (mobileScreen ? -20 : 15) +")");
 					
 	bubbleLegend(legend, rScale, legendSizes = [5000, 1000, 100], legendName = "Zware intramurale zorgaanbod");				
 
-	//Create a wrapper for the circle legend				
-	var legendCircle = chartTop2.append("g").attr("class", "legendWrapper")
-					.attr("transform", "translate(" + (scatterWidth - 110) + "," + 15 +")");
-	
-	legendCircle.append("text")
-		.attr("class","legendTitle")
-		.attr("transform", "translate(" + 0 + "," + -25 + ")")
-		.attr("x", 0 + "px")
-		.attr("y", 0 + "px")
-		.attr("dy", "1em")
-		.text("Elke cirkel is een gemeente")
-		.call(wrap, 80);
-	legendCircle.append("circle")
-        .attr('r', rScale(2000))
-        .attr('class',"legendCircle")
-        .attr('cx', 0)
-        .attr('cy', rScale(2000) + 7);
+	//Create a wrapper for the circle legend	
+	if (!mobileScreen) {
+		var legendCircle = chartTop2.append("g").attr("class", "legendWrapper")
+						.attr("transform", "translate(" + (scatterWidth - 110) + "," + 15 +")");
+		
+		legendCircle.append("text")
+			.attr("class","legendTitle")
+			.attr("transform", "translate(" + 0 + "," + -25 + ")")
+			.attr("x", 0 + "px")
+			.attr("y", 0 + "px")
+			.attr("dy", "1em")
+			.text("Elke cirkel is een gemeente")
+			.call(wrap, 80);
+		legendCircle.append("circle")
+			.attr('r', rScale(2000))
+			.attr('class',"legendCircle")
+			.attr('cx', 0)
+			.attr('cy', rScale(2000) + 7);
+	}//if
 		
 }//drawTopScatter
 
@@ -173,7 +176,7 @@ function drawBottomScatter2(width, height, margin) {
 	
 	//Set the scale for the bubble sizes
 	var rScale = d3.scale.sqrt()
-		.range([0, 20])
+		.range([0, (mobileScreen ? 10 : 20)])
 		.domain([0, d3.max(data, function(d) {return d.ZZP5_10_2020;})]);
 		
 	// Create zorgkantoor scatter plot
@@ -189,27 +192,29 @@ function drawBottomScatter2(width, height, margin) {
 	//////////////////////////////////////////////////////
 
 	var legend = chartBottom2.append("g").attr("class", "legendWrapper")
-					.attr("transform", "translate(" + (scatterWidth - 10) + "," + 15 +")");
+					.attr("transform", "translate(" + (scatterWidth - 10) + "," + (mobileScreen ? -20 : 15) +")");
 					
-	bubbleLegend(legend, rScale, legendSizes = [10000, 5000, 2000], legendName = "Zware intramurale zorgaanbod");				
+	bubbleLegend(legend, rScale, legendSizes = [10000, 4000, 2000], legendName = "Zware intramurale zorgaanbod");				
 
-	//Create a wrapper for the circle legend				
-	var legendCircle = chartBottom2.append("g").attr("class", "legendWrapper")
-					.attr("transform", "translate(" + (scatterWidth - 110) + "," + 15 +")");
-	
-	legendCircle.append("text")
-		.attr("class","legendTitle")
-		.attr("transform", "translate(" + 0 + "," + -25 + ")")
-		.attr("x", 0 + "px")
-		.attr("y", 0 + "px")
-		.attr("dy", "1em")
-		.text("Elke cirkel is een zorgkantoor regio")
-		.call(wrap, 90);
-	legendCircle.append("circle")
-        .attr('r', rScale(3000))
-        .attr('class',"legendCircle")
-        .attr('cx', 0)
-        .attr('cy', rScale(3000) + 7);
+	//Create a wrapper for the circle legend	
+	if (!mobileScreen) {	
+		var legendCircle = chartBottom2.append("g").attr("class", "legendWrapper")
+						.attr("transform", "translate(" + (scatterWidth - 110) + "," + 15 +")");
+		
+		legendCircle.append("text")
+			.attr("class","legendTitle")
+			.attr("transform", "translate(" + 0 + "," + -25 + ")")
+			.attr("x", 0 + "px")
+			.attr("y", 0 + "px")
+			.attr("dy", "1em")
+			.text("Elke cirkel is een zorgkantoor regio")
+			.call(wrap, 90);
+		legendCircle.append("circle")
+			.attr('r', rScale(3000))
+			.attr('class',"legendCircle")
+			.attr('cx', 0)
+			.attr('cy', rScale(3000) + 7);
+	}//if
 		
 }//drawBottomScatter
 
@@ -563,7 +568,8 @@ drawBottomScatter2(scatterWidth, scatterHeight, scatterMargin);
 				
 /*Draw the NL map*/
 drawMap(mapWrapper = map2, chartClass = "chartZZP5_10", colorScale = color2, colorVar = "ZZP5_10_Perc_Groei", 
-		mapTitle = "De ontwikkeling van de zware intramurale zorg per gemeente", width = mapWidth, height = mapHeight);
+		mapTitle = "De ontwikkeling van de zware intramurale zorg per gemeente", 
+		width = mapWidth, height = mapHeight, margin = scatterMargin);
 /*Draw the legend below the map*/
 drawHistoLegend(data = gemeentes, width = mapWidth, height = mapHeight, margin = scatterMargin,
 				colorScale = color2, xVar = "ZZP5_10_Perc_Groei", wrapper = mapLegendWrapper2, 

@@ -3,7 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 //General widths and heights	
-var scatterTilburgMargin = {left: 100, top: 70, right: 100, bottom: 90},
+var scatterTilburgMargin = {left: 50, top: 40, right: 50, bottom: 90},
 	scatterTilburgWidth = $(".dataresource.tilburg.scatter").width() - scatterTilburgMargin.left - scatterTilburgMargin.right,
 	scatterTilburgHeight = Math.min(500, scatterTilburgWidth*3/5);
 
@@ -76,7 +76,7 @@ function drawTilburgScatter(wrapper, width, height, margin) {
 			.call(yAxis);
 
 	var rScale = d3.scale.sqrt()
-		.range([0, 40])
+		.range([0, (mobileScreen ? 12 : 40)])
 		.domain([0, d3.max(data, function(d) {return d.ZZP1_4;})]);
 		
 	////////////////////////////////////////////////////////////	
@@ -174,7 +174,11 @@ function drawTilburgScatter(wrapper, width, height, margin) {
 					else if(d.GM_NAAM === "Venlo") return yScale(d.Perc_Groei_80plus) + rScale(d.ZZP5_10_Groei) + 12;
 					else return yScale(d.Perc_Groei_80plus) - rScale(d.ZZP1_4) - 9;					
 				})
-				.text(function(d) { return d.GM_NAAM; });
+				.text(function(d) {
+					if (!mobileScreen) return d.GM_NAAM; 
+					else if (d.GM_NAAM === "Tilburg") return d.GM_NAAM;
+					else return "";
+				});
 	
 	//////////////////////////////////////////////////////
 	///////////////// Initialize Labels //////////////////
@@ -187,8 +191,12 @@ function drawTilburgScatter(wrapper, width, height, margin) {
 		.attr("text-anchor", "middle")
 		.attr("transform", "translate(" + (width/2) + "," + (height + 40) + ")")
 		.style("font-size", "10px")
+		.attr("x", 0)
+		.attr("y", 0)
+		.attr("dy", "0em")
 		.text("Verhouding van de toename van het zware versus de afname van het " + 
-			  "lichte intramurale zorgaanbod (donkerblauwe versus lichtblauwe halve cirkel)");
+			  "lichte intramurale zorgaanbod (donkerblauwe versus lichtblauwe halve cirkel)")
+		.call(wrap, width*0.9);
 
 	//Set up y axis label
 	wrapper.append("g")
@@ -198,140 +206,92 @@ function drawTilburgScatter(wrapper, width, height, margin) {
 		.attr("dy", "0.35em")
 		.attr("class", "y axis label")
 		.attr("text-anchor", "middle")
-		.attr("transform", "translate(" + 0 + "," + (-margin.top*1/3 - 6) + ")")
+		.attr("transform", "translate(" + 0 + "," + (-35) + ")")
 		.style("font-size", "10px")
 		.text("Ontwikkeling van populatie 80+")
 		.call(wrap, 100);
-
-	//Set up chart title
-	//wrapper.append("g")
-	//	.append("text")
-	//	.attr("class","chartTitle")
-	//	.attr("transform", "translate(" + (width/2) + "," + (-margin.top*3/4) + ")")
-	//	.style("text-anchor", "middle")
-	//	.style("font-size", "12px")
-	//	.text("Gemeentes vergelijken");	
-	
-
-	var zeroLine = wrapper.append("g").attr("class", "median")
-		.attr("transform", "translate(" + xScale(0) + "," + 0 + ")")
-		.style("cursor", "default");
-	//The line itself
-	zeroLine.append("line")
-		.attr("x1", 0)
-		.attr("x2", 0)
-		.attr("y1", 0)
-		.attr("y2", (height + 10))
-		.style("stroke", "#B5B5B5")
-		.style("stroke-width", 1)
-		.style("stroke-dasharray", "2 2")
-		.style("shape-rendering", "crispEdges")
-		.style("pointer-events", "none");	
 
 	//////////////////////////////////////////////////////
 	/////////////////// Create Annotation ////////////////////
 	//////////////////////////////////////////////////////
 	
-	var annotation = wrapper.append("g").attr("class", "annotationWrapper")
-					.attr("transform", "translate(" + xScale(1.05) + "," + yScale(0.215) +")");				
-	
-	//The line and text explaining the > 100% cities
-	annotation.append("line")
-        .attr('class',"legendLine")
-        .attr('x1', 0)
-        .attr('y1', 0)
-		.attr('x2', 0)
-        .attr('y2', 60);	
-	annotation.append("text")
-        .attr('class',"legendText")
-        .attr('x', 8)
-        .attr('y', 25)
-		.attr('dy', '0.75em')
-		.text("Venlo en Oss hebben een toename van het zware intramurale zorgaanbod die 170%, respectievelijk, 160% omvat van " +
-			  "de afname van het lichte intramurale zorgaanbod. De locatie langs de verticale as is correct weergegeven.")
-		.call(wrap, 130);	
+	if(!mobileScreen) {
+		var annotation = wrapper.append("g").attr("class", "annotationWrapper")
+						.attr("transform", "translate(" + xScale(1.05) + "," + yScale(0.215) +")");				
+		
+		//The line and text explaining the > 100% cities
+		annotation.append("line")
+			.attr('class',"legendLine")
+			.attr('x1', 0)
+			.attr('y1', 0)
+			.attr('x2', 0)
+			.attr('y2', 60);	
+		annotation.append("text")
+			.attr('class',"legendText")
+			.attr('x', 8)
+			.attr('y', 25)
+			.attr('dy', '0.75em')
+			.text("Venlo en Oss hebben een toename van het zware intramurale zorgaanbod die 170%, respectievelijk, 160% omvat van " +
+				  "de afname van het lichte intramurale zorgaanbod. De locatie langs de verticale as is correct weergegeven.")
+			.call(wrap, 130);	
+	}//if
 	//////////////////////////////////////////////////////
 	/////////////////// Create Legend ////////////////////
 	//////////////////////////////////////////////////////
 	
-	var legend = wrapper.append("g").attr("class", "legendWrapper")
-					.attr("transform", "translate(" + (60) + "," + (100) +")");				
-	
-	//Left ZZP 1 - 4 half
-	legend.append("circle")
-		.attr("class", "legendScatterCircle")
-		.style("opacity", 0.4)
-		.attr("fill", "url(#gradientZZP1_4)")
-		.attr("cx", 0)
-		.attr("cy", 0)
-		.attr("r", rScale(500));
+	if(!mobileScreen) {
+		var legend = wrapper.append("g").attr("class", "legendWrapper")
+						.attr("transform", "translate(" + (60) + "," + (100) +")");				
 		
-	//Right ZZP 5 - 10 half
-	legend.append("circle")
-		.attr("class", "legendScatterCircle")
-		.style("opacity", 0.4)
-		.attr("fill", "url(#gradientZZP5_10)")
-		.attr("cx", 0)
-		.attr("cy", 0)
-		.attr("r", rScale(70));
-	
-	//The line and text explaining the left ZZP 1 - 4 half
-	legend.append("line")
-        .attr('class',"legendLine")
-        .attr('x1', -15)
-        .attr('y1', -80)
-		.attr('x2', -15)
-        .attr('y2', -33);	
-	legend.append("text")
-        .attr('class',"legendText")
-        .attr('x', -11)
-        .attr('y', -80)
-		.attr('dy', '0.75em')
-		.text("De afname van het lichte intramurale zorgaanbod")
-		.call(wrap, 100);
+		//Left ZZP 1 - 4 half
+		legend.append("circle")
+			.attr("class", "legendScatterCircle")
+			.style("opacity", 0.4)
+			.attr("fill", "url(#gradientZZP1_4)")
+			.attr("cx", 0)
+			.attr("cy", 0)
+			.attr("r", rScale(500));
+			
+		//Right ZZP 5 - 10 half
+		legend.append("circle")
+			.attr("class", "legendScatterCircle")
+			.style("opacity", 0.4)
+			.attr("fill", "url(#gradientZZP5_10)")
+			.attr("cx", 0)
+			.attr("cy", 0)
+			.attr("r", rScale(70));
+		
+		//The line and text explaining the left ZZP 1 - 4 half
+		legend.append("line")
+			.attr('class',"legendLine")
+			.attr('x1', -15)
+			.attr('y1', -80)
+			.attr('x2', -15)
+			.attr('y2', -33);	
+		legend.append("text")
+			.attr('class',"legendText")
+			.attr('x', -11)
+			.attr('y', -80)
+			.attr('dy', '0.75em')
+			.text("De afname van het lichte intramurale zorgaanbod")
+			.call(wrap, 100);
 
-	//The line and text explaining the right ZZP 5 - 10 half
-	legend.append("line")
-        .attr('class',"legendLine")
-        .attr('x1', 5)
-        .attr('y1', -50)
-		.attr('x2', 5)
-        .attr('y2', -13);	
-	legend.append("text")
-        .attr('class',"legendText")
-        .attr('x', 9)
-        .attr('y', -50)
-		.attr('dy', '0.75em')
-		.text("De toename van het zware intramurale zorgaanbod")
-		.call(wrap, 100);
+		//The line and text explaining the right ZZP 5 - 10 half
+		legend.append("line")
+			.attr('class',"legendLine")
+			.attr('x1', 5)
+			.attr('y1', -50)
+			.attr('x2', 5)
+			.attr('y2', -13);	
+		legend.append("text")
+			.attr('class',"legendText")
+			.attr('x', 9)
+			.attr('y', -50)
+			.attr('dy', '0.75em')
+			.text("De toename van het zware intramurale zorgaanbod")
+			.call(wrap, 100);
 		
-	//Lines explaining the differences between the two halves
-	/*legend.append("line")
-        .attr('class',"legendLine")
-        .attr('x1', xScale(xOffset + 15))
-        .attr('y1', yScale(0.053))
-		.attr('x2', xScale(xOffset + 15))
-        .attr('y2', yScale(0.052));	
-	legend.append("line")
-        .attr('class',"legendLine")
-        .attr('x1', xScale(xOffset + 8))
-        .attr('y1', yScale(0.053))
-		.attr('x2', xScale(xOffset + 22))
-        .attr('y2', yScale(0.053));	
-	legend.append("line")
-        .attr('class',"legendLine")
-        .attr('x1', xScale(xOffset + 8))
-        .attr('y1', yScale(0.052))
-		.attr('x2', xScale(xOffset + 22))
-        .attr('y2', yScale(0.052));	
-	legend.append("text")
-        .attr('class',"legendText")
-        .attr('x', xScale(xOffset + 30))
-        .attr('y', yScale(0.0525))
-		.attr('dy', '0.75em')
-		.text("Indicatie voor het aantal plekken bij zorgcentra dat niet gevuld gaat worden in de komende jaren door een groei aan zware intramurale zorg")
-		.call(wrap, 100);
-	*/
+	}//if
 		
 }// function drawTilburgScatter
 

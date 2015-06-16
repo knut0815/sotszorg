@@ -3,7 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 //General widths and heights	
-var lineTilburgMargin = {left: 200, top: 30, right: 200, bottom: 30},
+var lineTilburgMargin = {left: (mobileScreen ? 30 : 200), top: 30, right: (mobileScreen ? 30 : 200), bottom: 30},
 	lineTilburgWidth = Math.min($(".dataresource.tilburg.year").width(),900) - lineTilburgMargin.left - lineTilburgMargin.right,
 	lineTilburgHeight = 150;
 
@@ -178,29 +178,31 @@ function drawBuildingYearLine(wrapper, width, height, margin) {
 	///////////////// Initialize Legend //////////////////
 	//////////////////////////////////////////////////////
 
-	var legend = wrapper.append("g").attr("class", "legendWrapper")
-					.attr("transform", "translate(" + (width + 150) + "," + -30 +")");
-					
-	bubbleLegend(legend, rScale, legendSizes = [300, 150, 50], legendName = "Aantal plaatsen per locatie");				
+	if (!mobileScreen) {
+		var legend = wrapper.append("g").attr("class", "legendWrapper")
+						.attr("transform", "translate(" + (width + 150) + "," + -30 +")");
+						
+		bubbleLegend(legend, rScale, legendSizes = [300, 150, 50], legendName = "Aantal plaatsen per locatie");				
 
-	//Create a wrapper for the circle legend				
-	var legendCircle = wrapper.append("g").attr("class", "legendWrapper")
-					.attr("transform", "translate(" + (width + 60) + "," + -30 +")");
-	
-	legendCircle.append("text")
-		.attr("class","legendTitle")
-		.attr("transform", "translate(" + 0 + "," + -25 + ")")
-		.attr("x", 0 + "px")
-		.attr("y", 0 + "px")
-		.attr("dy", "1em")
-		.text("Elke cirkel is een zorglocatie")
-		.call(wrap, 90);
-	legendCircle.append("circle")
-        .attr('r', rScale(300))
-        .attr('class',"legendCircle")
-        .attr('cx', 0)
-        .attr('cy', rScale(300) + 10);
+		//Create a wrapper for the circle legend				
+		var legendCircle = wrapper.append("g").attr("class", "legendWrapper")
+						.attr("transform", "translate(" + (width + 60) + "," + -30 +")");
 		
+		legendCircle.append("text")
+			.attr("class","legendTitle")
+			.attr("transform", "translate(" + 0 + "," + -25 + ")")
+			.attr("x", 0 + "px")
+			.attr("y", 0 + "px")
+			.attr("dy", "1em")
+			.text("Elke cirkel is een zorglocatie")
+			.call(wrap, 90);
+		legendCircle.append("circle")
+			.attr('r', rScale(300))
+			.attr('class',"legendCircle")
+			.attr('cx', 0)
+			.attr('cy', rScale(300) + 10);
+	}//if	
+	
 }// function drawBuildingYearLine
 
 //Hide the tooltip when the mouse moves away

@@ -2,11 +2,12 @@
 ///////// State of the State - Health - 2 Maps & Scatterplots /////////////
 ///////////////////////////////////////////////////////////////////////////
 
+var mobileScreen = ($(window).width() > 400 ? false : true);
 ///////////////////////////////////////////////////////////////////////////
 ////////////////// Initiate Scatter plots ZZP 1 - 4 ///////////////////////
 ///////////////////////////////////////////////////////////////////////////
 //General widths and heights
-var scatterMargin = {left: 60, top: 60, right: 40, bottom: 50},
+var scatterMargin = {left: 60, top: (mobileScreen ? 90 : 60), right: 40, bottom: 50},
 	scatterWidth = Math.min($(".dataresource.zzp1_4.chartTop").width(),500) - scatterMargin.left - scatterMargin.right,
 	scatterHeight = scatterWidth*3/5;
 
@@ -41,7 +42,7 @@ var svgMap = d3.select(".dataresource.zzp1_4.map").append("svg")
 var map = svgMap.append("g").attr("class", "map")
 		.attr("transform", "translate(" + scatterMargin.left + "," + scatterMargin.top + ")");
 var mapCallout = svgMap.append("g").attr("class", "mapCallout")
-		.attr("transform", "translate(" + (scatterMargin.left) + "," + (scatterMargin.top * 7/4) + ")")
+		.attr("transform", "translate(" + (scatterMargin.left) + "," + (scatterMargin.top * 5/4) + ")")
 		.style("visibility", "hidden");
 var mapLegendWrapper = svgMap.append("g").attr("class", "legend");
 var clusterLegendWrapper = svgMap.append("g").attr("class", "legend");
@@ -50,17 +51,20 @@ var clusterLegendWrapper = svgMap.append("g").attr("class", "legend");
 /////////////////// Draw the Map /////////////////////
 //////////////////////////////////////////////////////
 		
-function drawMap(mapWrapper, chartClass, colorScale, colorVar, mapTitle, width, height) {
+function drawMap(mapWrapper, chartClass, colorScale, colorVar, mapTitle, width, height, margin) {
 	
 	////////////////////////////////////////////////////////////	
 	///////////////////// Initiate Map /////////////////////////
 	////////////////////////////////////////////////////////////
 
+	var mapScale = (width+margin.left+margin.right > 450 ? 5500 : 4250);
+	var mapMove = (width+margin.left+margin.right > 450 ? 40 : 20);
+	
 	// new projection
 	var projection = d3.geo.mercator()
 						.center(d3.geo.centroid(gemeentesGeo))
-						.scale(5500)
-						.translate([(width/2 + 50), (height/2+10)]);
+						.scale(mapScale)
+						.translate([(width/2 + mapMove), (height/2+10)]);
 	var path = d3.geo.path().projection(projection);
 
 	//Is the map being made for the ZZP 1 - 4 or ZZP 5 - 10 version
@@ -89,14 +93,14 @@ function drawMap(mapWrapper, chartClass, colorScale, colorVar, mapTitle, width, 
 	mapWrapper.append("g")
 		.append("text")
 		.attr("class","map title")
-		.attr("transform", "translate(" + (width/2) + "," + (0) + ")")
+		.attr("transform", "translate(" + (width/2) + "," + (-margin.top/2) + ")")
 		.style("text-anchor", "middle")
 		.style("font-size", "16px")
 		.attr("x", 0)
 		.attr("y", 0)
 		.attr("dy", "0.35em")
 		.text(mapTitle)
-		.call(wrap, width*0.8);
+		.call(wrap, width*0.9);
 		
 }/*drawMap*/
 
@@ -491,10 +495,8 @@ function drawTopScatter(width, height, margin) {
 	var xAxis = d3.svg.axis()
 		.orient("bottom")
 		.scale(xScale)
-		.ticks(6)
-		.tickFormat(d3.format("s"))
 		.tickFormat(function (d) {
-				return xScale.tickFormat(8,function(d) { 
+				return xScale.tickFormat((mobileScreen ? 3 : 8),function(d) { 
 					var prefix = d3.formatPrefix(d); 
 					return prefix.scale(d) + prefix.symbol;
 				})(d);
@@ -509,7 +511,7 @@ function drawTopScatter(width, height, margin) {
 	
 	//Set the scale for the bubble size
 	var rScale = d3.scale.sqrt()
-		.range([0, 20])
+		.range([0, (mobileScreen ? 10 : 20)])
 		.domain([0, d3.max(data, function(d) {return d.ZZP1_4;})]);
 		
 	// Create gemeente scatter plot
@@ -552,27 +554,29 @@ function drawTopScatter(width, height, margin) {
 	//////////////////////////////////////////////////////
 
 	var legend = chartTop.append("g").attr("class", "legendWrapper")
-					.attr("transform", "translate(" + (scatterWidth - 10) + "," + 15 +")");
+					.attr("transform", "translate(" + (scatterWidth - 10) + "," + (mobileScreen ? -20 : 15) +")");
 					
 	bubbleLegend(legend, rScale, legendSizes = [2000, 500, 50], legendName = "Lichte intramurale zorg die verdwijnt");	
 
-	//Create a wrapper for the circle legend				
-	var legendCircle = chartTop.append("g").attr("class", "legendWrapper")
-					.attr("transform", "translate(" + (scatterWidth - 110) + "," + 15 +")");
-	
-	legendCircle.append("text")
-		.attr("class","legendTitle")
-		.attr("transform", "translate(" + 0 + "," + -25 + ")")
-		.attr("x", 0 + "px")
-		.attr("y", 0 + "px")
-		.attr("dy", "1em")
-		.text("Elke cirkel is een gemeente")
-		.call(wrap, 80);
-	legendCircle.append("circle")
-        .attr('r', rScale(500))
-        .attr('class',"legendCircle")
-        .attr('cx', 0)
-        .attr('cy', rScale(500) + 7);	
+	//Create a wrapper for the circle legend	
+	if (!mobileScreen) {	
+		var legendCircle = chartTop.append("g").attr("class", "legendWrapper")
+						.attr("transform", "translate(" + (scatterWidth - 110) + "," + 15 +")");
+		
+		legendCircle.append("text")
+			.attr("class","legendTitle")
+			.attr("transform", "translate(" + 0 + "," + -25 + ")")
+			.attr("x", 0 + "px")
+			.attr("y", 0 + "px")
+			.attr("dy", "1em")
+			.text("Elke cirkel is een gemeente")
+			.call(wrap, 80);
+		legendCircle.append("circle")
+			.attr('r', rScale(500))
+			.attr('class',"legendCircle")
+			.attr('cx', 0)
+			.attr('cy', rScale(500) + 7);
+	}//if		
 	
 }//drawTopScatter
 
@@ -603,7 +607,7 @@ function drawBottomScatter(width, height, margin) {
 	
 	//Set the scale for the bubble sizes
 	var rScale = d3.scale.sqrt()
-		.range([0, 20])
+		.range([0, (mobileScreen ? 10 : 20)])
 		.domain([0, d3.max(data, function(d) {return d.ZZP1_4;})]);
 		
 	// Create zorgkantoor scatter plot
@@ -619,28 +623,29 @@ function drawBottomScatter(width, height, margin) {
 	//////////////////////////////////////////////////////
 
 	var legend = chartBottom.append("g").attr("class", "legendWrapper")
-					.attr("transform", "translate(" + (scatterWidth - 10) + "," + 15 +")");
+					.attr("transform", "translate(" + (scatterWidth - 10) + "," + (mobileScreen ? -20 : 15) +")");
 					
 	bubbleLegend(legend, rScale, legendSizes = [3000, 1000, 200], legendName = "Lichte intramurale zorg die verdwijnt");				
 
-	//Create a wrapper for the circle legend				
-	var legendCircle = chartBottom.append("g").attr("class", "legendWrapper")
-					.attr("transform", "translate(" + (scatterWidth - 110) + "," + 15 +")");
-	
-	legendCircle.append("text")
-		.attr("class","legendTitle")
-		.attr("transform", "translate(" + 0 + "," + -25 + ")")
-		.attr("x", 0 + "px")
-		.attr("y", 0 + "px")
-		.attr("dy", "1em")
-		.text("Elke cirkel is een zorgkantoor regio")
-		.call(wrap, 90);
-	legendCircle.append("circle")
-        .attr('r', rScale(1000))
-        .attr('class',"legendCircle")
-        .attr('cx', 0)
-        .attr('cy', rScale(1000) + 7);
+	//Create a wrapper for the circle legend	
+	if (!mobileScreen) {	
+		var legendCircle = chartBottom.append("g").attr("class", "legendWrapper")
+						.attr("transform", "translate(" + (scatterWidth - 110) + "," + 15 +")");
 		
+		legendCircle.append("text")
+			.attr("class","legendTitle")
+			.attr("transform", "translate(" + 0 + "," + -25 + ")")
+			.attr("x", 0 + "px")
+			.attr("y", 0 + "px")
+			.attr("dy", "1em")
+			.text("Elke cirkel is een zorgkantoor regio")
+			.call(wrap, 90);
+		legendCircle.append("circle")
+			.attr('r', rScale(1000))
+			.attr('class',"legendCircle")
+			.attr('cx', 0)
+			.attr('cy', rScale(1000) + 7);
+	}//if
 }//drawBottomScatter
 
 ///////////////////////////////////////////////////////////////////////////
@@ -1024,7 +1029,8 @@ drawBottomScatter(scatterWidth, scatterHeight, scatterMargin);
 				
 /*Draw the NL map*/
 drawMap(mapWrapper = map, chartClass = "chartZZP1_4", colorScale = color, colorVar = "ZZP1_4_Perc", 
-		mapTitle = "De afname van de lichte t.o.v. de totale intramurale zorg per gemeente", width = mapWidth, height = mapHeight);
+		mapTitle = "De afname van de lichte t.o.v. de totale intramurale zorg per gemeente", 
+		width = mapWidth, height = mapHeight, margin = scatterMargin);
 /*Draw the legend below the map*/
 drawHistoLegend(data = gemeentes, width = mapWidth, height = mapHeight, margin = scatterMargin,
 				colorScale = color, xVar = "ZZP1_4_Perc", wrapper = mapLegendWrapper, 
