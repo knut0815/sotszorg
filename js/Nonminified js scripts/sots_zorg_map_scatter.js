@@ -57,7 +57,7 @@ function drawMap(mapWrapper, chartClass, colorScale, colorVar, mapTitle, width, 
 	///////////////////// Initiate Map /////////////////////////
 	////////////////////////////////////////////////////////////
 
-	var mapScale = (width+margin.left+margin.right > 450 ? 5500 : 4250);
+	var mapScale = (width+margin.left+margin.right > 450 ? 5000 : 4250);
 	var mapMove = (width+margin.left+margin.right > 450 ? 40 : 20);
 	
 	// new projection
@@ -588,8 +588,7 @@ function drawBottomScatter(width, height, margin) {
 	//Set the new x axis range
 	var xScale = d3.scale.linear()
 		.range([0, width])
-		.domain([0,d3.max(data, function(d) {return d.AANT_INW;})])
-		.nice();
+		.domain([0,1.5e6]);
 	
 	//Initiate the x axis
 	var xAxis = d3.svg.axis()
@@ -743,7 +742,7 @@ function fadeIn(d) {
 			trigger: 'manual',
 			html : true,
 			content: function() { 
-				return "<p style='font-size: 11px; text-align: center;'>" + name + "</p>"; }
+				return "<span style='font-size: 11px; text-align: center;'>" + name + "</span>"; }
 		});
 		$(chosenCircle).popover('show');
 	}//if
@@ -787,7 +786,7 @@ function fadeIn(d) {
 		//Update callout text and numbers
 		mapCallout.selectAll("#callout_title").text(chosen.GM_NAAM);
 		//Do not show anything for missing data
-		if (GM_CODES[d.GM_CODE] === undefined) {
+		if (GM_CODES[chosen.GM_CODE] === undefined) {
 			mapCallout.selectAll("#callout_top").text("-");
 			mapCallout.selectAll("#callout_bottom").text("-");
 		} else {

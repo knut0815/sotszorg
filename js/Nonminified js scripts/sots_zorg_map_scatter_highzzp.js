@@ -314,7 +314,7 @@ function fadeIn2(d) {
 			container: cont,
 			trigger: 'manual',
 			html : true,
-			content: function() { return "<p style='font-size: 11px; text-align: center;'>" + name + "</p>"; }});
+			content: function() { return "<span style='font-size: 11px; text-align: center;'>" + name + "</span>"; }});
 		$(chosenCircle).popover('show');
 	}//if
 	

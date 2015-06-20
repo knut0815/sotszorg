@@ -76,7 +76,7 @@ function drawTilburgScatter(wrapper, width, height, margin) {
 			.call(yAxis);
 
 	var rScale = d3.scale.sqrt()
-		.range([0, (mobileScreen ? 12 : 40)])
+		.range([0, (mobileScreen ? 12 : 30)])
 		.domain([0, d3.max(data, function(d) {return d.ZZP1_4;})]);
 		
 	////////////////////////////////////////////////////////////	

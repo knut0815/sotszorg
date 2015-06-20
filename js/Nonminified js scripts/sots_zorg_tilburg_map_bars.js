@@ -43,8 +43,8 @@ function drawMapTilburg(mapWrapper, colorVar, mapTitle, width, height) {
 	///////////////////// Initiate Map /////////////////////////
 	////////////////////////////////////////////////////////////
 	
-	var mapScale = (!mobileScreen ? 90000 : 50000);
-	var mapMove = (!mobileScreen ? 90 : 70);
+	var mapScale = (!mobileScreen ? 70000 : 45000);
+	var mapMove = (!mobileScreen ? 70 : 70);
 	
 	// new projection
 	var projection = d3.geo.mercator()

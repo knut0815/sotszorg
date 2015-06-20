@@ -1,0 +1,55 @@
+<!-- D3.js -->
+<script src="/content/dam/html/nl/sots/zorg/js/sots_zorg_d3_topo.min.js"></script>
+
+<!-- CSS -->
+<link rel="stylesheet" href="/content/dam/html/nl/sots/zorg/css/custom-bootstrap.css">
+<!-- Customized bootstrap js only needed functions -->
+<script src="/content/dam/html/nl/sots/zorg/js/sots_bootstrap.min.js"></script>
+
+<!-- General Scripts needed for multiple plots -->
+<link rel="stylesheet" href="/content/dam/html/nl/sots/zorg/css/sots_style.css">
+<script src="/content/dam/html/nl/sots/zorg/js/sots_zorg_general.min.js"></script>
+<script src="/content/dam/html/nl/sots/zorg/js/sots_zorg_geo.min.js"></script>
+
+<!-- SotS HTML ZZP 1 - 4 Section -->
+<div class = "sotsVisualWrapper">
+	<div id="cont" class="container-fluid">
+		<div class="row text-center mapRowWrapper">
+			<div class="title-h3" style="color: #3B3B3B; padding-bottom: 20px;">De afname van het lichte intramurale zorgaanbod tot 2020</div>
+			
+			<div class="col-md-6">
+				<div class="row">
+					<div class="col-sm-8 col-sm-offset-2">
+						 <div class="form-group">			
+							<select id="searchBoxLowZZP" class="combobox input-large form-control" style="display: none;" onchange="searchEventLowZZP(this.value)">
+							  <option value="" selected="selected">Zoek gemeente...</option>
+							</select>
+						  </div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12"><div class="dataresource zzp1_4 map"></div></div>
+				</div>
+			</div>
+			
+			<div class="col-md-6 column">
+				<div class="row">
+					<div class="col-md-12"><div class="dataresource zzp1_4 chartTop"></div></div>
+				</div>
+				<div class="row">
+					<div class="col-md-12"><div class="dataresource zzp1_4 chartBottom"></div></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row text-center">
+			<div class="col-md-12">
+				<div class="legendTitle" style="font-size: 9px; padding-top: 20px;">Bron: CIZ (2014) & Zorg op de Kaart (2014) - Vergelijkbare gemeenten: CBS (2013), CIZ (2014), EDM (2014), g32.nl (2015) & Zorg op de kaart (2014)</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+
+<!-- Scripts needed for the NL map and Scatterplots -->
+<script src="/content/dam/html/nl/sots/zorg/js/sots_zorg_map_scatter.min.js"></script> 

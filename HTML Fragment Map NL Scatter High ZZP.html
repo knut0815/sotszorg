@@ -1,0 +1,43 @@
+<!-- SotS HTML ZZP 5 - 10 Section -->
+<div class = "sotsVisualWrapper">
+	<div id="cont" class="container-fluid">
+		<div class="row text-center mapRowWrapper">
+			<div class="title-h3"  style="color: #3B3B3B; padding-bottom: 20px;">De ontwikkeling van het zware intramurale zorgaanbod tot 2020 bij ongewijzigd beleid</div>
+
+			<div class="col-md-6">
+				<div class="row">
+					<div class="col-sm-8 col-sm-offset-2">
+						 <div class="form-group">			
+							<select id="searchBoxHighZZP" class="combobox input-large form-control" style="display: none;" onchange="searchEventHighZZP(this.value)">
+							  <option value="" selected="selected">Zoek gemeente...</option>
+							</select>
+						  </div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12"><div class="dataresource zzp5_10 map"></div></div>
+				</div>
+			</div>
+			
+			<div class="col-md-6">
+				<div class="row">
+					<div class="col-md-12"><div class="dataresource zzp5_10 chartTop"></div></div>
+				</div>
+				<div class="row">
+					<div class="col-md-12"><div class="dataresource zzp5_10 chartBottom"></div></div>
+				</div>
+			</div>
+			
+		</div>
+		
+		<div class="row text-center">
+			<div class="col-md-12">
+				<div class="legendTitle" style="font-size: 9px; padding-top: 20px;">Bron: CBS (2014), CIZ (2014) & Zorg op de kaart (2014) - Vergelijkbare gemeenten: CBS (2013), CIZ (2014), EDM (2014), g32.nl (2015) & Zorg op de kaart (2014)</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+
+<!-- Scripts needed for the NL map and Scatterplots -->
+<script src="/content/dam/html/nl/sots/zorg/js/sots_zorg_map_scatter_highzzp.min.js"></script>
