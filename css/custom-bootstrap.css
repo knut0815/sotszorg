@@ -46,6 +46,16 @@
 .text-center {
   text-align: center;
 }
+
+.col-sm-6, .col-md-6, .col-sm-8, .col-md-8, .col-md-12 {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
 @media (min-width: 768px) {
   .col-sm-8 {
     width: 66.66666667%;
